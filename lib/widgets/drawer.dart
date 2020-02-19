@@ -59,7 +59,7 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
         ),
         ListTile(
           leading: Icon(Icons.grade),
-          title: Text('評　価'),
+          title: Text('評 価'),
           selected: currentRoute == Rating.route,
           onTap: () {
             Navigator.pushReplacementNamed(context, Rating.route);
@@ -94,16 +94,16 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
   );
 }
 
-Widget buildAction(String title, IconData iconData, Function onPressed) {
-  return ListTile(
-    onTap: onPressed,
-    title: Text(
-      title,
-      style: TextStyle(color: Colors.black),
-    ),
-    leading: Icon(
-      iconData,
-      color: Colors.black,
-    ),
-  );
-}
+//Widget buildAction(String title, IconData iconData, Function onPressed) {
+//  return ListTile(
+//    onTap: onPressed,
+//    title: Text(
+//      title,
+//      style: TextStyle(color: Colors.black),
+//    ),
+//    leading: Icon(
+//      iconData,
+//      color: Colors.black,
+//    ),
+//  );
+//}
