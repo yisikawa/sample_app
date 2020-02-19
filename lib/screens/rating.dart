@@ -14,9 +14,13 @@ class Rating extends StatelessWidget {
         child: Column(
           children: [
             Flexible(
-              child:
-                  Image.asset('images/geko_tamago.png', width: 90, height: 90),
-            ),
+                child: Icon(
+              Icons.child_care,
+              size: 90,
+              color: Colors.amber,
+            )
+//                  Image.asset('images/geko_tamago.png', width: 90, height: 90),
+                ),
             Flexible(
                 child: Text('評　価',
                     style: TextStyle(fontSize: 20, color: Colors.blue)))

@@ -17,16 +17,16 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
           child: Column(
             children: <Widget>[
               Text('登下校　見守りアプリ'),
-              Image.asset(
-                'images/geko_tamago.png',
-                width: 100,
-                height: 100,
+              Icon(
+                Icons.child_care,
+                size: 100,
+                color: Colors.amber,
               ),
             ],
           ),
         ),
         ListTile(
-          trailing: Icon(Icons.home),
+          leading: Icon(Icons.home),
           title: Text('ホーム'),
           selected: currentRoute == HomePage.route,
           onTap: () {
@@ -34,7 +34,7 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
           },
         ),
         ListTile(
-          trailing: Icon(Icons.account_box),
+          leading: Icon(Icons.account_box),
           title: Text('アカウント'),
           selected: currentRoute == Accounts.route,
           onTap: () {
@@ -42,7 +42,7 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
           },
         ),
         ListTile(
-          trailing: Icon(Icons.group),
+          leading: Icon(Icons.group),
           title: Text('グループ'),
           selected: currentRoute == Group.route,
           onTap: () {
@@ -50,7 +50,7 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
           },
         ),
         ListTile(
-          trailing: Icon(Icons.calendar_today),
+          leading: Icon(Icons.calendar_today),
           title: Text('カレンダー'),
           selected: currentRoute == Calendar.route,
           onTap: () {
@@ -58,7 +58,7 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
           },
         ),
         ListTile(
-          trailing: Icon(Icons.grade),
+          leading: Icon(Icons.grade),
           title: Text('評　価'),
           selected: currentRoute == Rating.route,
           onTap: () {
@@ -66,7 +66,7 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
           },
         ),
         ListTile(
-          trailing: Icon(Icons.directions_walk),
+          leading: Icon(Icons.directions_walk),
           title: Text('通学経路'),
           selected: currentRoute == SchoolRoute.route,
           onTap: () {
@@ -74,7 +74,7 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
           },
         ),
         ListTile(
-          trailing: Icon(Icons.location_on),
+          leading: Icon(Icons.location_on),
           title: Text('マーカー'),
           selected: currentRoute == Marker.route,
           onTap: () {
@@ -82,7 +82,7 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
           },
         ),
         ListTile(
-          trailing: Icon(Icons.location_searching),
+          leading: Icon(Icons.location_searching),
           title: Text('現在地'),
           selected: currentRoute == Location.route,
           onTap: () {
@@ -90,6 +90,20 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
           },
         ),
       ],
+    ),
+  );
+}
+
+Widget buildAction(String title, IconData iconData, Function onPressed) {
+  return ListTile(
+    onTap: onPressed,
+    title: Text(
+      title,
+      style: TextStyle(color: Colors.black),
+    ),
+    leading: Icon(
+      iconData,
+      color: Colors.black,
     ),
   );
 }
