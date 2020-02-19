@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
 
+import 'screens/home.dart';
+import 'screens/accounts.dart';
+import 'screens/group.dart';
+import 'screens/calendar.dart';
+import 'screens/rating.dart';
+import 'screens/school_route.dart';
+import 'screens/marker.dart';
+import 'screens/location.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -7,40 +16,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-          ],
+        title: 'GEKO APP',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
         ),
-      ),
-    );
+        home: HomePage(),
+        routes: <String, WidgetBuilder>{
+          Accounts.route: (context) => Accounts(),
+          Group.route: (context) => Group(),
+          Calendar.route: (context) => Calendar(),
+          Rating.route: (context) => Rating(),
+          SchoolRoute.route: (context) => SchoolRoute(),
+          Marker.route: (context) => Marker(),
+          Location.route: (context) => Location(),
+        });
   }
 }
