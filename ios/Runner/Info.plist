@@ -22,6 +22,12 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Your location is required for this app</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Your location is required for this app</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Your location is required for this app</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -41,11 +47,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	    <key>NSLocationAlwaysUsageDescription</key> //追加 20.02.20
-        <string>Your location is required for this app</string> //追加 20.02.20
-        <key>NSLocationWhenInUseUsageDescription</key> //追加 20.02.20
-        <string>Your location is required for this app</string> //追加 20.02.20
-        <key>NSLocationAlwaysAndWhenInUseUsageDescription</key> //追加 20.02.20
-        <string>Your location is required for this app</string> //追加 20.02.20
 </dict>
 </plist>
