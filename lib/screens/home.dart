@@ -26,10 +26,11 @@ class _HomePageState extends State<HomePage> {
   static const double maxZoom = 18.0;
 
   static List<String> mapHttp = [
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+//    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    'https://j.tile.openstreetmap.jp/{z}/{x}/{y}.png',
     'https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png',
     'https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png',
-    'https://cyberjapandata.gsi.go.jp/xyz/ort/{z}/{x}/{y}.jpg'
+    'https://cyberjapandata.gsi.go.jp/xyz/ort/{z}/{x}/{y}.jpg',
   ];
 
   @override
@@ -98,12 +99,8 @@ class _HomePageState extends State<HomePage> {
                 zoom: 17.0,
               ),
               layers: [
-                TileLayerOptions(urlTemplate: mapHttp[_counter % 4],
-//                        'https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png',
-//                        'https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png',
-//                        'https://cyberjapandata.gsi.go.jp/xyz/ort/{z}/{x}/{y}.jpg',
-//                        'https://j.tile.openstreetmap.jp/{z}/{x}/{y}.png',
-//                        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                TileLayerOptions(
+                    urlTemplate: mapHttp[_counter % 4],
                     subdomains: ['a', 'b', 'c']),
               ],
             ),
