@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../widgets/drawer.dart';
 
@@ -16,6 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _counter = 0;
+  Position position; // Geolocator
 
   MapController mapController;
   final FitBoundsOptions options =
@@ -33,7 +35,16 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    mapController = MapController();
+    mapController = new MapController();
+    _getLocation(context);
+  }
+
+  Future<void> _getLocation(context) async {
+    Position _currentPosition = await Geolocator().getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high); // ここで精度を「high」に指定している
+    setState(() {
+      position = _currentPosition;
+    });
   }
 
   void _zoomIn() {
@@ -42,7 +53,9 @@ class _HomePageState extends State<HomePage> {
     if (zoom > maxZoom) {
       zoom = maxZoom;
     }
-    mapController.move(mapController.center, zoom);
+    setState(() {
+      mapController.move(mapController.center, zoom);
+    });
   }
 
   void _zoomOut() {
@@ -51,7 +64,17 @@ class _HomePageState extends State<HomePage> {
     if (zoom < minZoom) {
       zoom = minZoom;
     }
-    mapController.move(mapController.center, zoom);
+    setState(() {
+      mapController.move(mapController.center, zoom);
+    });
+  }
+
+  void _myLocation() {
+    mapController.center.latitude = position.latitude;
+    mapController.center.longitude = position.longitude;
+    setState(() {
+      mapController.move(mapController.center, mapController.zoom);
+    });
   }
 
   void _changeMap() {
@@ -110,6 +133,17 @@ class _HomePageState extends State<HomePage> {
               onPressed: _zoomOut,
               tooltip: 'Zoom out map',
               child: Icon(Icons.zoom_out, size: 20, color: Colors.blueGrey),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: FloatingActionButton(
+              heroTag: "myLocation",
+              mini: true,
+              backgroundColor: Colors.white,
+              onPressed: _myLocation,
+              tooltip: 'my location',
+              child: Icon(Icons.my_location, size: 20, color: Colors.blueGrey),
             ),
           ),
           Padding(

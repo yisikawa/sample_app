@@ -41,5 +41,11 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	    <key>NSLocationAlwaysUsageDescription</key> //追加 20.02.20
+        <string>Your location is required for this app</string> //追加 20.02.20
+        <key>NSLocationWhenInUseUsageDescription</key> //追加 20.02.20
+        <string>Your location is required for this app</string> //追加 20.02.20
+        <key>NSLocationAlwaysAndWhenInUseUsageDescription</key> //追加 20.02.20
+        <string>Your location is required for this app</string> //追加 20.02.20
 </dict>
 </plist>
