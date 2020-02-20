@@ -15,8 +15,6 @@ class Accounts extends StatelessWidget {
           children: [
             Flexible(
               child: Icon(Icons.child_care, size: 240, color: Colors.amber),
-//              child: Image.asset('images/geko_tamago.png',
-//                  width: 240, height: 240),
             ),
             Flexible(
                 child: Text('アカウント名',
