@@ -48,6 +48,9 @@ class _AccountsPageState extends State<AccountsPage> {
     _ddList.forEach((val) {
       print(val);
     });
+    setState(() {
+      accountName = _ddList[0];
+    });
   }
 
   @override
@@ -62,7 +65,7 @@ class _AccountsPageState extends State<AccountsPage> {
               child: Icon(Icons.child_care, size: 240, color: Colors.amber),
             ),
             Flexible(
-                child: Text('account Name',
+                child: Text(accountName,
 //                    '${accountList[currentAccout].userID} ${accountList[currentAccout].note}',
                     style: TextStyle(fontSize: 40, color: Colors.blue)))
           ],
