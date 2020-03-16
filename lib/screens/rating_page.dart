@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import '../widgets/drawer.dart';
 
 class Rating extends StatelessWidget {
-  static const String route = '/rating';
+  static const String id = 'Rating Page';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('評 価')),
-      drawer: buildDrawer(context, route),
+      drawer: buildDrawer(context, id),
       body: Center(
         child: Column(
           children: [

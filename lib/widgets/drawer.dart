@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../screens/home.dart';
-import '../screens/accounts.dart';
+import '../screens/accounts_page.dart';
 import '../screens/group.dart';
 import '../screens/calendar.dart';
-import '../screens/rating.dart';
-import '../screens/school_route.dart';
-import '../screens/marker.dart';
-import '../screens/location.dart';
+import '../screens/rating_page.dart';
+import '../screens/route_page.dart';
+import '../screens/marker_page.dart';
+import '../screens/location_page.dart';
 
 Drawer buildDrawer(BuildContext context, String currentRoute) {
   return Drawer(
@@ -28,65 +28,65 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
         ListTile(
           leading: Icon(Icons.home),
           title: Text('ホーム'),
-          selected: currentRoute == HomePage.route,
+          selected: currentRoute == HomePage.id,
           onTap: () {
-            Navigator.pushReplacementNamed(context, HomePage.route);
+            Navigator.pushReplacementNamed(context, HomePage.id);
           },
         ),
         ListTile(
           leading: Icon(Icons.account_box),
           title: Text('アカウント'),
-          selected: currentRoute == Accounts.route,
+          selected: currentRoute == AccountsPage.id,
           onTap: () {
-            Navigator.pushReplacementNamed(context, Accounts.route);
+            Navigator.pushReplacementNamed(context, AccountsPage.id);
           },
         ),
         ListTile(
           leading: Icon(Icons.group),
           title: Text('グループ'),
-          selected: currentRoute == Group.route,
+          selected: currentRoute == Group.id,
           onTap: () {
-            Navigator.pushReplacementNamed(context, Group.route);
+            Navigator.pushReplacementNamed(context, Group.id);
           },
         ),
         ListTile(
           leading: Icon(Icons.calendar_today),
           title: Text('カレンダー'),
-          selected: currentRoute == Calendar.route,
+          selected: currentRoute == Calendar.id,
           onTap: () {
-            Navigator.pushReplacementNamed(context, Calendar.route);
+            Navigator.pushReplacementNamed(context, Calendar.id);
           },
         ),
         ListTile(
           leading: Icon(Icons.grade),
           title: Text('評 価'),
-          selected: currentRoute == Rating.route,
+          selected: currentRoute == Rating.id,
           onTap: () {
-            Navigator.pushReplacementNamed(context, Rating.route);
+            Navigator.pushReplacementNamed(context, Rating.id);
           },
         ),
         ListTile(
           leading: Icon(Icons.directions_walk),
           title: Text('通学経路'),
-          selected: currentRoute == SchoolRoute.route,
+          selected: currentRoute == RoutePage.id,
           onTap: () {
-            Navigator.pushReplacementNamed(context, SchoolRoute.route);
+            Navigator.pushReplacementNamed(context, RoutePage.id);
           },
         ),
         ListTile(
           leading: Icon(Icons.location_on),
           title: Text('マーカー'),
-          selected: currentRoute == Marker.route,
+          selected: currentRoute == Marker.id,
           onTap: () {
-            Navigator.pushReplacementNamed(context, Marker.route);
+            Navigator.pushReplacementNamed(context, Marker.id);
           },
         ),
         ListTile(
           leading: Icon(Icons.location_searching),
           title: Text('現在地'),
-          selected: currentRoute == Location.route,
+          selected: currentRoute == Location.id,
           onTap: () {
-            Navigator.pushReplacementNamed(context, Location.route);
+            Navigator.pushReplacementNamed(context, Location.id);
           },
         ),
       ],

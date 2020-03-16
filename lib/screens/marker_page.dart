@@ -5,13 +5,13 @@ import 'package:latlong/latlong.dart';
 import '../widgets/drawer.dart';
 
 class Marker extends StatelessWidget {
-  static const String route = '/marker';
+  static const String id = 'Marker Page';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('マーカー')),
-      drawer: buildDrawer(context, route),
+      drawer: buildDrawer(context, id),
       body: Column(
         children: [
           Padding(

@@ -4,14 +4,18 @@ import 'package:latlong/latlong.dart';
 
 import '../widgets/drawer.dart';
 
-class SchoolRoute extends StatelessWidget {
-  static const String route = '/school_route';
+class RoutePage extends StatefulWidget {
+  static const String id = 'Route Page';
+  @override
+  _RoutePageState createState() => _RoutePageState();
+}
 
+class _RoutePageState extends State<RoutePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('通学経路')),
-      drawer: buildDrawer(context, route),
+      drawer: buildDrawer(context, RoutePage.id),
       body: Column(
         children: [
           Padding(

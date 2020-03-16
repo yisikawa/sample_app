@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:sample_app/screens/login_page.dart';
 
-import 'screens/home.dart';
-import 'screens/accounts.dart';
+import 'screens/accounts_page.dart';
 import 'screens/group.dart';
 import 'screens/calendar.dart';
-import 'screens/rating.dart';
-import 'screens/school_route.dart';
-import 'screens/marker.dart';
-import 'screens/location.dart';
+import 'screens/rating_page.dart';
+import 'screens/route_page.dart';
+import 'screens/marker_page.dart';
+import 'screens/location_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,15 +20,16 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: HomePage(),
+        initialRoute: AccountsPage.id,
         routes: <String, WidgetBuilder>{
-          Accounts.route: (context) => Accounts(),
-          Group.route: (context) => Group(),
-          Calendar.route: (context) => Calendar(),
-          Rating.route: (context) => Rating(),
-          SchoolRoute.route: (context) => SchoolRoute(),
-          Marker.route: (context) => Marker(),
-          Location.route: (context) => Location(),
+          LoginPage.id: (context) => LoginPage(),
+          AccountsPage.id: (context) => AccountsPage(),
+          Group.id: (context) => Group(),
+          Calendar.id: (context) => Calendar(),
+          Rating.id: (context) => Rating(),
+          RoutePage.id: (context) => RoutePage(),
+          Marker.id: (context) => Marker(),
+          Location.id: (context) => Location(),
         });
   }
 }

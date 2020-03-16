@@ -6,7 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import '../widgets/drawer.dart';
 
 class HomePage extends StatefulWidget {
-  static const String route = '/';
+  static const String id = 'Home Page';
   HomePage({Key key, this.title}) : super(key: key);
 
   final String title;
@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('ホーム')),
-      drawer: buildDrawer(context, HomePage.route),
+      drawer: buildDrawer(context, HomePage.id),
       body: Column(
         children: [
           Flexible(

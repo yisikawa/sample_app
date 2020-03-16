@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import '../widgets/drawer.dart';
 
 class Group extends StatelessWidget {
-  static const String route = '/group';
+  static const String id = 'Group Page';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('グループ')),
-      drawer: buildDrawer(context, route),
+      drawer: buildDrawer(context, id),
       body: Center(
         child: Column(
           children: [

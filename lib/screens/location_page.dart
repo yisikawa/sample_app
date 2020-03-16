@@ -5,13 +5,13 @@ import 'package:latlong/latlong.dart';
 import '../widgets/drawer.dart';
 
 class Location extends StatelessWidget {
-  static const String route = '/location';
+  static const String id = 'Location Page';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('現在地')),
-      drawer: buildDrawer(context, route),
+      drawer: buildDrawer(context, id),
       body: Column(
         children: [
           Padding(
