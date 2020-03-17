@@ -5,24 +5,38 @@ import '../constants/globals.dart' as globals;
 import 'package:http/http.dart' as http;
 import 'dart:io';
 
+List<Account> accountList = [];
+
 class Account {
   Account({this.userID, this.btxID, this.sensorID, this.note});
-  final String userID;
-  final String btxID;
-  final String sensorID;
-  final String note;
+  String userID;
+  String btxID;
+  String sensorID;
+  String note;
 }
 
 class AccountData {
-  Future<dynamic> getAccountData() async {
-    final res = await http.get(
+  Future<void> getAccountData() async {
+    http.Response response = await http.get(
       globals.targetUrl + 'api/auth',
       headers: {HttpHeaders.authorizationHeader: globals.authToken},
     );
-    if (res.statusCode == 200) {
-      return jsonDecode(res.body);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+      if (data != null) {
+        accountList.clear();
+        data.forEach((val) {
+          Account tmp = Account(
+            userID: val['user_id'].toString(),
+            btxID: val['btx_id'].toString(),
+            sensorID: val['sensor_id'].toString(),
+            note: val['note'].toString(),
+          );
+          accountList.add(tmp);
+        });
+      }
     } else {
-      print('can not login! status code = $res.statusCode');
+      print('can not login! status code = $response.statusCode');
     }
   }
 }

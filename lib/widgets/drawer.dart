@@ -26,35 +26,11 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
           ),
         ),
         ListTile(
-          leading: Icon(Icons.home),
-          title: Text('ホーム'),
-          selected: currentRoute == HomePage.id,
-          onTap: () {
-            Navigator.pushReplacementNamed(context, HomePage.id);
-          },
-        ),
-        ListTile(
           leading: Icon(Icons.account_box),
           title: Text('アカウント'),
           selected: currentRoute == AccountsPage.id,
           onTap: () {
             Navigator.pushReplacementNamed(context, AccountsPage.id);
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.group),
-          title: Text('グループ'),
-          selected: currentRoute == Group.id,
-          onTap: () {
-            Navigator.pushReplacementNamed(context, Group.id);
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.calendar_today),
-          title: Text('カレンダー'),
-          selected: currentRoute == Calendar.id,
-          onTap: () {
-            Navigator.pushReplacementNamed(context, Calendar.id);
           },
         ),
         ListTile(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:sample_app/constants/globals.dart' as globals;
 import 'package:sample_app/screens/accounts_page.dart';
+import '../services/account.dart';
 
 class LoginPage extends StatefulWidget {
   static const id = 'login_page';
@@ -10,6 +11,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  AccountData accountData = AccountData();
   final TextEditingController _useridFilter = new TextEditingController();
   final TextEditingController _passwordFilter = new TextEditingController();
   String _userid = "";
@@ -40,14 +42,15 @@ class _LoginPageState extends State<LoginPage> {
     final res = await http.post(globals.targetUrl + 'api/login',
         body: {'userid': _userid, 'password': _password});
     globals.authToken = res.headers['authorization'];
-    setState(() {
-      if (globals.authToken != null) {
-        print(globals.authToken);
+
+    if (globals.authToken != null) {
+      await accountData.getAccountData();
+      setState(() {
         Navigator.of(context).pushNamed(AccountsPage.id);
-      } else {
-        print('can not login!');
-      }
-    });
+      });
+    } else {
+      print('can not login!');
+    }
   }
 
   @override
