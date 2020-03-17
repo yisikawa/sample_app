@@ -18,8 +18,8 @@ class Account {
 class AccountData {
   Future<void> getAccountData() async {
     http.Response response = await http.get(
-      globals.targetUrl + 'api/auth',
-      headers: {HttpHeaders.authorizationHeader: globals.authToken},
+      globals.kTargetUrl + 'api/auth',
+      headers: {HttpHeaders.authorizationHeader: globals.kAuthToken},
     );
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);

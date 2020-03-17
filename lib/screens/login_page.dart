@@ -39,12 +39,13 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _loginPressed() async {
-    final res = await http.post(globals.targetUrl + 'api/login',
+    final res = await http.post(globals.kTargetUrl + 'api/login',
         body: {'userid': _userid, 'password': _password});
-    globals.authToken = res.headers['authorization'];
+    globals.kAuthToken = res.headers['authorization'];
 
-    if (globals.authToken != null) {
+    if (globals.kAuthToken != null) {
       await accountData.getAccountData();
+      globals.kAccountNo = 0;
       setState(() {
         Navigator.of(context).pushNamed(AccountsPage.id);
       });

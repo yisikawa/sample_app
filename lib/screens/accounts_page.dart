@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
-import 'dart:async';
 import '../widgets/drawer.dart';
 import '../services/account.dart';
+import '../constants/globals.dart' as globals;
 
 class AccountsPage extends StatefulWidget {
   static const String id = 'Account Page';
@@ -14,7 +13,6 @@ class _AccountsPageState extends State<AccountsPage> {
   List<Account> accounts = [];
   String selectedCurrency = '';
 
-  int currentAccount = 0;
   String accountName = '';
   String beaconName = '';
   String sensorName = '';
@@ -23,8 +21,8 @@ class _AccountsPageState extends State<AccountsPage> {
   @override
   void initState() {
     super.initState();
-    if (accountList.length > 0) {
-      updateAccount(0);
+    if (accountList.length > 0 && globals.kAccountNo < accountList.length) {
+      updateAccount(globals.kAccountNo);
     }
   }
 
@@ -39,8 +37,8 @@ class _AccountsPageState extends State<AccountsPage> {
 
   void _select(String choice) {
     Account it = accountList.firstWhere((val) => val.userID == choice);
-    // Causes the app to rebuild with the new _selectedChoice.
-    updateAccount(accountList.indexOf(it));
+    globals.kAccountNo = accountList.indexOf(it);
+    updateAccount(globals.kAccountNo);
   }
 
   @override
