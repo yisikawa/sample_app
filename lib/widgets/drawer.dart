@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../constants/globals.dart' as globals;
 import '../screens/home.dart';
 import '../screens/accounts_page.dart';
 import '../screens/group.dart';
@@ -27,7 +27,7 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
         ),
         ListTile(
           leading: Icon(Icons.account_box),
-          title: Text('アカウント'),
+          title: Text(globals.kAccountPageTitle),
           selected: currentRoute == AccountsPage.id,
           onTap: () {
             Navigator.pushReplacementNamed(context, AccountsPage.id);
@@ -35,7 +35,7 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
         ),
         ListTile(
           leading: Icon(Icons.grade),
-          title: Text('評 価'),
+          title: Text(globals.kRatingPageTitle),
           selected: currentRoute == Rating.id,
           onTap: () {
             Navigator.pushReplacementNamed(context, Rating.id);
@@ -43,7 +43,7 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
         ),
         ListTile(
           leading: Icon(Icons.directions_walk),
-          title: Text('通学経路'),
+          title: Text(globals.kRoutePageTitle),
           selected: currentRoute == RoutePage.id,
           onTap: () {
             Navigator.pushReplacementNamed(context, RoutePage.id);
@@ -51,7 +51,7 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
         ),
         ListTile(
           leading: Icon(Icons.location_on),
-          title: Text('マーカー'),
+          title: Text(globals.kMakerPageTitle),
           selected: currentRoute == Marker.id,
           onTap: () {
             Navigator.pushReplacementNamed(context, Marker.id);
@@ -59,7 +59,7 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
         ),
         ListTile(
           leading: Icon(Icons.location_searching),
-          title: Text('現在地'),
+          title: Text(globals.kLocationPageTitle),
           selected: currentRoute == Location.id,
           onTap: () {
             Navigator.pushReplacementNamed(context, Location.id);

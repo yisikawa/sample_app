@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+import 'package:sample_app/constants/globals.dart';
 
 import '../widgets/drawer.dart';
 
@@ -14,7 +15,7 @@ class _RoutePageState extends State<RoutePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('通学経路')),
+      appBar: AppBar(title: Text(kRoutePageTitle)),
       drawer: buildDrawer(context, RoutePage.id),
       body: Column(
         children: [

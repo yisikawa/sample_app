@@ -17,14 +17,14 @@ class Rating extends StatefulWidget {
 
 class _RatingState extends State<Rating> {
 //  String accountName = accountList[globals.kAccountNo].note;
-  String accountName = 'test';
+  String accountName = '';
   List<int> ratingNum = [
-    5,
-    1,
-    2,
-    3,
-    4,
-    5,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
   ];
   List<String> ratingDate = [
     '20200101',
@@ -35,6 +35,7 @@ class _RatingState extends State<Rating> {
     '20200105',
   ];
   List<String> countStar = [
+    '☆☆☆☆☆',
     '★☆☆☆☆',
     '★★☆☆☆',
     '★★★☆☆',
@@ -100,7 +101,7 @@ class _RatingState extends State<Rating> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('評 価'),
+        title: Text(globals.kRatingPageTitle),
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.calendar_today),
@@ -131,7 +132,7 @@ class _RatingState extends State<Rating> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(countStar[ratingNum[0] ~/ 5 - 1],
+              Text(countStar[ratingNum[0] ~/ 5],
                   style: TextStyle(fontSize: 60, color: Colors.amber)),
             ],
           ),
@@ -147,16 +148,11 @@ class _RatingState extends State<Rating> {
           SizedBox(
             height: 10,
           ),
-          RatingDay(
-              dayDate: ratingDate[1], dayStar: countStar[ratingNum[1] - 1]),
-          RatingDay(
-              dayDate: ratingDate[2], dayStar: countStar[ratingNum[2] - 1]),
-          RatingDay(
-              dayDate: ratingDate[3], dayStar: countStar[ratingNum[3] - 1]),
-          RatingDay(
-              dayDate: ratingDate[4], dayStar: countStar[ratingNum[4] - 1]),
-          RatingDay(
-              dayDate: ratingDate[5], dayStar: countStar[ratingNum[5] - 1]),
+          RatingDay(dayDate: ratingDate[1], dayStar: countStar[ratingNum[1]]),
+          RatingDay(dayDate: ratingDate[2], dayStar: countStar[ratingNum[2]]),
+          RatingDay(dayDate: ratingDate[3], dayStar: countStar[ratingNum[3]]),
+          RatingDay(dayDate: ratingDate[4], dayStar: countStar[ratingNum[4]]),
+          RatingDay(dayDate: ratingDate[5], dayStar: countStar[ratingNum[5]]),
         ],
       ),
       bottomNavigationBar: Container(

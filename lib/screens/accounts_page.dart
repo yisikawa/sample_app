@@ -45,7 +45,7 @@ class _AccountsPageState extends State<AccountsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('アカウント'),
+        title: Text(globals.kAccountPageTitle),
         actions: <Widget>[
           PopupMenuButton<String>(
             icon: Icon(Icons.account_box),
@@ -64,35 +64,46 @@ class _AccountsPageState extends State<AccountsPage> {
       ),
       drawer: buildDrawer(context, AccountsPage.id),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
             child: Icon(Icons.child_care, size: 240, color: Colors.amber),
           ),
+          SizedBox(
+            height: 20,
+          ),
           Container(
               padding: EdgeInsets.only(left: 16.0, right: 16.0),
               child: Text('アカウント：$accountName',
                   style: TextStyle(fontSize: 30, color: Colors.blue))),
+          SizedBox(
+            height: 20,
+          ),
           Container(
               padding: EdgeInsets.only(left: 16.0, right: 16.0),
               child: Text('ビーコン　：$beaconName',
                   style: TextStyle(fontSize: 30, color: Colors.blue))),
+          SizedBox(
+            height: 20,
+          ),
           Container(
               padding: EdgeInsets.only(left: 16.0, right: 16.0),
               child: Text('センサー　：$sensorName',
                   style: TextStyle(fontSize: 30, color: Colors.blue))),
+          SizedBox(
+            height: 20,
+          ),
           Container(
               padding: EdgeInsets.only(left: 16.0, right: 16.0),
               child: Text('ノート　　：$noteName',
                   style: TextStyle(fontSize: 30, color: Colors.blue))),
-          Container(
-            height: 40.0,
-            alignment: Alignment.center,
-//            padding: EdgeInsets.only(bottom: 30.0),
-            color: Colors.lightBlue,
-          ),
         ],
+      ),
+      bottomNavigationBar: Container(
+        height: 40.0,
+        alignment: Alignment.center,
+//            padding: EdgeInsets.only(bottom: 30.0),
+        color: Colors.lightBlue,
       ),
     );
   }
