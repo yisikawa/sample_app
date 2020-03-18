@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sample_app/screens/login_page.dart';
-
+import 'constants/globals.dart' as globals;
 import 'screens/accounts_page.dart';
-import 'screens/group.dart';
-import 'screens/calendar.dart';
 import 'screens/rating_page.dart';
 import 'screens/route_page.dart';
 import 'screens/marker_page.dart';
@@ -16,16 +14,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'GEKO APP',
+        title: globals.kAppTitle,
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: LoginPage.id,
+        initialRoute: RoutePage.id,
         routes: <String, WidgetBuilder>{
           LoginPage.id: (context) => LoginPage(),
           AccountsPage.id: (context) => AccountsPage(),
-          Group.id: (context) => Group(),
-          Calendar.id: (context) => Calendar(),
           Rating.id: (context) => Rating(),
           RoutePage.id: (context) => RoutePage(),
           Marker.id: (context) => Marker(),

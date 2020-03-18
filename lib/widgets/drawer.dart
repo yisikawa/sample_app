@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/globals.dart' as globals;
-import '../screens/home.dart';
 import '../screens/accounts_page.dart';
-import '../screens/group.dart';
-import '../screens/calendar.dart';
 import '../screens/rating_page.dart';
 import '../screens/route_page.dart';
 import '../screens/marker_page.dart';
@@ -15,8 +12,10 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
       children: <Widget>[
         DrawerHeader(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Text('登下校　見守りアプリ'),
+              Text(globals.kAppTitle),
               Icon(
                 Icons.child_care,
                 size: 100,

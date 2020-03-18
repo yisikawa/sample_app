@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'dart:io';
 import '../services/account.dart';
 import '../widgets/rating_day.dart';
+import '../services/select_date.dart';
 
 class Rating extends StatefulWidget {
   static const String id = 'Rating Page';
@@ -70,26 +71,6 @@ class _RatingState extends State<Rating> {
     }
   }
 
-  Future<Null> _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: globals.kSelectedDate,
-      firstDate: DateTime(2018, 11),
-      lastDate: DateTime.now(),
-    );
-
-    if (picked != null && picked != globals.kSelectedDate) {
-      setState(() {
-        globals.kSelectedDate = picked;
-        //ここで選択された値を変数なり、コントローラーに代入する
-        globals.kTargetDate =
-            DateFormat('yyyyMMdd').format(globals.kSelectedDate);
-//        print('select date = ' + globals.targetDate);
-      });
-      _getRating();
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -105,7 +86,10 @@ class _RatingState extends State<Rating> {
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.calendar_today),
-              onPressed: () => _selectDate(context)),
+              onPressed: () {
+                selectDate(context);
+                _getRating();
+              }),
         ],
       ),
       drawer: buildDrawer(context, Rating.id),

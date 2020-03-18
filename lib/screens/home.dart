@@ -22,12 +22,12 @@ class _HomePageState extends State<HomePage> {
   MapController mapController;
   final FitBoundsOptions options =
       const FitBoundsOptions(padding: EdgeInsets.all(12.0));
-  static const double minZoom = 11.0;
-  static const double maxZoom = 18.0;
+  static const double minZoom = 5.0;
+  static const double maxZoom = 19.0;
 
   static List<String> mapHttp = [
-//    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    'https://j.tile.openstreetmap.jp/{z}/{x}/{y}.png',
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+//    'https://j.tile.openstreetmap.jp/{z}/{x}/{y}.png',
     'https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png',
     'https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png',
     'https://cyberjapandata.gsi.go.jp/xyz/ort/{z}/{x}/{y}.jpg',
