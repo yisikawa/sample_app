@@ -86,7 +86,7 @@ class _RatingState extends State<Rating> {
           IconButton(
               icon: Icon(Icons.calendar_today),
               onPressed: () {
-                selectDate(context);
+                selectDate(context).toString();
                 _getRating();
               }),
         ],

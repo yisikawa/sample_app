@@ -18,13 +18,13 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: RoutePage.id,
+        initialRoute: MarkerPage.id,
         routes: <String, WidgetBuilder>{
           LoginPage.id: (context) => LoginPage(),
           AccountsPage.id: (context) => AccountsPage(),
           Rating.id: (context) => Rating(),
           RoutePage.id: (context) => RoutePage(),
-          Marker.id: (context) => Marker(),
+          MarkerPage.id: (context) => MarkerPage(),
           Location.id: (context) => Location(),
         });
   }
