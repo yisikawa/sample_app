@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:http/http.dart' as http;
 import 'package:latlong/latlong.dart';
-import 'package:sample_app/constants/globals.dart';
 import 'package:geolocator/geolocator.dart';
-import '../widgets/drawer.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'dart:io';
+import 'package:gpx/gpx.dart';
+import '../widgets/drawer.dart';
+import '../services/select_date.dart';
+import '../constants/globals.dart' as globals;
+import '../services/account.dart';
+
 
 class RoutePage extends StatefulWidget {
   static const String id = 'Route Page';
@@ -13,9 +19,16 @@ class RoutePage extends StatefulWidget {
 }
 
 class _RoutePageState extends State<RoutePage> {
-  int _counter = 0;
-  Position position; // Geolocator
+  List<String> tokoList = ['登校', '下校',];
 
+  String accountName = 'test';
+  String examDate = '2020/01/01';
+  String tokoName = '登校';
+  int _counter = 0;
+  Position position; // Geolocator　現在地
+  List<Marker> markersData = []; // start,goalマーカー
+  List<LatLng> points = []; //経路　
+  var bounds = new LatLngBounds(); // 経路範囲
   MapController mapController;
   final FitBoundsOptions options =
       const FitBoundsOptions(padding: EdgeInsets.all(12.0));
@@ -32,8 +45,9 @@ class _RoutePageState extends State<RoutePage> {
   @override
   void initState() {
     super.initState();
-    mapController = new MapController();
+    mapController = MapController();
     _getLocation(context);
+    _getRoute();
   }
 
   Future<void> _getLocation(context) async {
@@ -44,30 +58,122 @@ class _RoutePageState extends State<RoutePage> {
     });
   }
 
+  Future<void> _getRoute() async {
+    var res = await http.get(
+      globals.kTargetUrl +
+          'api/route?userid=' +
+          accountList[globals.kAccountNo].userID +
+//          'ctest19' +
+          '&date=' +
+          globals.kTargetDate +
+//          '20181217'
+              '&type=' +
+          globals.kTokoFlag.toString(),
+      headers: {HttpHeaders.authorizationHeader: globals.kAuthToken},
+    );
+    // 経路設定
+    if( res.statusCode == 200 ) {
+      setState(() {
+      points.clear();
+      var xmlGpx = GpxReader().fromString(res.body);
+      xmlGpx.trks.forEach((oneTrks) {
+        oneTrks.trksegs.forEach((oneTrksegs) {
+          oneTrksegs.trkpts.forEach((val) {
+            points.add(LatLng(val.lat, val.lon));
+          });
+        });
+      });
+      // start,goal マーカーセット
+      markersData.clear();
+      Marker tmp1 = Marker(
+        point: points.first,
+        builder: (ctx) =>
+         Container(child: Image.asset('images/start2.png')),
+        width: 40.0,
+        height: 40.0,
+      );
+      markersData.add(tmp1);
+      Marker tmp2 = Marker(
+        point: points.last,
+        builder: (ctx) =>
+            Container(child: Image.asset('images/goal.png')),
+        width: 40.0,
+        height: 40.0,
+      );
+      markersData.add(tmp2);
+      // 経路範囲
+      points.forEach((val) {
+        bounds.extend(val);
+      });
+
+      mapController.fitBounds(
+        bounds,
+        options: FitBoundsOptions(
+          padding: EdgeInsets.all(40.0),
+        ),
+      );
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(kRoutePageTitle)),
+      appBar: AppBar(
+        title: Text(globals.kRoutePageTitle),
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.calendar_today),
+              onPressed: () {
+                selectDate(context);
+                _getRoute();
+              }),
+          PopupMenuButton<String> (
+            icon: Icon(Icons.directions_walk),
+            initialValue: tokoList.first,
+            onSelected: (String choice) {
+              globals.kTokoFlag = (choice == '登校')? 1:2;
+              setState(() {
+                tokoName = choice;
+              });
+              _getRoute();
+            },
+            itemBuilder: (BuildContext context) {
+              return tokoList.map( (String choice) {
+                return PopupMenuItem(
+                  child:Text(choice),
+                  value:choice,
+                );
+              }).toList();
+          }),
+        ],
+      ),
       drawer: buildDrawer(context, RoutePage.id),
       body: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
+              Icon(
+                Icons.child_care,
+                size: 24.0,
+                color: Colors.black,
+              ),
               Text(
-                '2020/01/01',
+                accountList[globals.kAccountNo].note,
+                style: TextStyle(fontSize: 24.0, color: Colors.black),
+              ),
+              Text(
+                globals.kTargetDate,
                 style: TextStyle(
-                  fontSize: 24.0,
+                  fontSize: 20.0,
                   color: Colors.black,
                 ),
               ),
-              SizedBox(
-                width: 15.0,
-              ),
               Text(
-                '登校',
+                tokoName,
                 style: TextStyle(
-                  fontSize: 24.0,
+                  fontSize: 20.0,
                   color: Colors.black,
                 ),
               )
@@ -82,8 +188,17 @@ class _RoutePageState extends State<RoutePage> {
               ),
               layers: [
                 TileLayerOptions(
-                    urlTemplate: mapHttp[_counter % 4],
-                    subdomains: ['a', 'b', 'c']),
+                  urlTemplate: mapHttp[_counter % 4],
+                  subdomains: ['a', 'b', 'c']),
+
+                PolylineLayerOptions(
+                  polylines: [
+                    Polyline(points: points, strokeWidth: 5.0, color: Colors.red),
+                    ],
+                ),
+                MarkerLayerOptions(
+                  markers: markersData,
+                ),
               ],
             ),
           ),

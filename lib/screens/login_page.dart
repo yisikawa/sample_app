@@ -42,6 +42,7 @@ class _LoginPageState extends State<LoginPage> {
     final res = await http.post(globals.kTargetUrl + 'api/login',
         body: {'userid': _userid, 'password': _password});
     globals.kAuthToken = res.headers['authorization'];
+//    print(globals.kAuthToken);
 
     if (globals.kAuthToken != null) {
       await accountData.getAccountData();

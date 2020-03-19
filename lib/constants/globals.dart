@@ -1,9 +1,14 @@
-String kAuthToken =
-    ' Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiZXhwIjoxNTg1MTk1Njc5fQ.Jx54qy9PqSisSsZgNWhwJQcowzWEEBuJWSoHwziLW0MvwFmYC9ahvsukVEjifwqsZHUPyEgkg0kGBbcPG6tBVA';
-//String kAuthToken = '';
-String kTargetUrl = 'http://10.0.2.2:10080/';
+//tokogeko.net
+//String kAuthToken =
+//    ' Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiZXhwIjoxNTg1MTk1Njc5fQ.Jx54qy9PqSisSsZgNWhwJQcowzWEEBuJWSoHwziLW0MvwFmYC9ahvsukVEjifwqsZHUPyEgkg0kGBbcPG6tBVA';
 //String kTargetUrl = 'https://tokogeko.net/';
+// 10.0.2.2:10080
+String kAuthToken =
+    ' Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiZXhwIjoxNTg1NDQyMzM0fQ.GB5fUhTgpTjIrMiVrWNfTVPRvHc-Dp0sSYZSr_mfQLbPthm7G4fAeEUIWu8kKCSnnRiiURFxnEoBNLAqBZ1vMg';
+String kTargetUrl = 'http://10.0.2.2:10080/';
+
 int kAccountNo = 0;
+int kTokoFlag = 1; // 1:登校　2:下校
 String kTargetDate = '';
 DateTime kSelectedDate = DateTime.now();
 

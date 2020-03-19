@@ -12,16 +12,21 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
       children: <Widget>[
         DrawerHeader(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(globals.kAppTitle),
+              Text(
+                globals.kAppTitle,
+                style: TextStyle(color: Colors.white),
+              ),
               Icon(
                 Icons.child_care,
                 size: 100,
-                color: Colors.amber,
+                color: Colors.white,
               ),
             ],
+          ),
+          decoration: BoxDecoration(
+            color: Colors.blue,
           ),
         ),
         ListTile(
@@ -51,9 +56,9 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
         ListTile(
           leading: Icon(Icons.location_on),
           title: Text(globals.kMakerPageTitle),
-          selected: currentRoute == Marker.id,
+          selected: currentRoute == MarkerPage.id,
           onTap: () {
-            Navigator.pushReplacementNamed(context, Marker.id);
+            Navigator.pushReplacementNamed(context, MarkerPage.id);
           },
         ),
         ListTile(
