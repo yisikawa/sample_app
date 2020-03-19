@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-const kStarTextStyle = TextStyle(fontSize: 36, color: Colors.amber);
-const kDateTextStyle = TextStyle(fontSize: 32, color: Colors.blue);
+const kStarTextStyle = TextStyle(fontSize: 30, color: Colors.amber);
+const kDateTextStyle = TextStyle(fontSize: 30, color: Colors.blue);
 
 class RatingDay extends StatelessWidget {
   RatingDay({

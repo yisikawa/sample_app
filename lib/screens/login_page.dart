@@ -63,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
         centerTitle: true,
       ),
       body: Container(
-        padding: EdgeInsets.fromLTRB(16.0, 100.0, 16.0, 0.0),
+        padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
@@ -71,7 +71,6 @@ class _LoginPageState extends State<LoginPage> {
               controller: _useridFilter,
               decoration: InputDecoration(
                   labelText: 'ユーザーID',
-                  hintText: 'enter user ID',
                   icon: Icon(
                     Icons.account_circle,
                     size: 40.0,
@@ -84,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
               controller: _passwordFilter,
               decoration: InputDecoration(
                   labelText: 'パスワード',
-                  hintText: 'enter password',
+//                  hintText: 'enter password',
                   icon: Icon(
                     Icons.security,
                     size: 40.0,

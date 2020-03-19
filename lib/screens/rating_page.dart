@@ -116,16 +116,16 @@ class _RatingState extends State<Rating> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(countStar[ratingNum[0] ~/ 5],
-                  style: TextStyle(fontSize: 60, color: Colors.amber)),
+                  style: TextStyle(fontSize: 40, color: Colors.amber)),
             ],
           ),
           SizedBox(
-            height: 30,
+            height: 10,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              Text('今週の評価', style: TextStyle(fontSize: 40, color: Colors.blue)),
+              Text('今週の評価', style: TextStyle(fontSize: 30, color: Colors.blue)),
             ],
           ),
           SizedBox(
@@ -138,12 +138,12 @@ class _RatingState extends State<Rating> {
           RatingDay(dayDate: ratingDate[5], dayStar: countStar[ratingNum[5]]),
         ],
       ),
-      bottomNavigationBar: Container(
-        height: 40.0,
-        alignment: Alignment.center,
-//            padding: EdgeInsets.only(bottom: 30.0),
-        color: Colors.lightBlue,
-      ),
+//      bottomNavigationBar: Container(
+//        height: 40.0,
+//        alignment: Alignment.center,
+////            padding: EdgeInsets.only(bottom: 30.0),
+//        color: Colors.lightBlue,
+//      ),
     );
   }
 }

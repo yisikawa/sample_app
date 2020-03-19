@@ -3,6 +3,7 @@ import '../widgets/drawer.dart';
 import '../services/account.dart';
 import '../constants/globals.dart' as globals;
 
+const kFontSize = 30.0;
 class AccountsPage extends StatefulWidget {
   static const String id = 'Account Page';
   @override
@@ -67,7 +68,7 @@ class _AccountsPageState extends State<AccountsPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
-            child: Icon(Icons.child_care, size: 240, color: Colors.amber),
+            child: Icon(Icons.child_care, size: 120, color: Colors.amber),
           ),
           SizedBox(
             height: 20,
@@ -75,36 +76,36 @@ class _AccountsPageState extends State<AccountsPage> {
           Container(
               padding: EdgeInsets.only(left: 16.0, right: 16.0),
               child: Text('アカウント：$accountName',
-                  style: TextStyle(fontSize: 30, color: Colors.blue))),
+                  style: TextStyle(fontSize: kFontSize, color: Colors.blue))),
           SizedBox(
             height: 20,
           ),
           Container(
               padding: EdgeInsets.only(left: 16.0, right: 16.0),
               child: Text('ビーコン　：$beaconName',
-                  style: TextStyle(fontSize: 30, color: Colors.blue))),
+                  style: TextStyle(fontSize: kFontSize, color: Colors.blue))),
           SizedBox(
             height: 20,
           ),
           Container(
               padding: EdgeInsets.only(left: 16.0, right: 16.0),
               child: Text('センサー　：$sensorName',
-                  style: TextStyle(fontSize: 30, color: Colors.blue))),
+                  style: TextStyle(fontSize: kFontSize, color: Colors.blue))),
           SizedBox(
             height: 20,
           ),
           Container(
               padding: EdgeInsets.only(left: 16.0, right: 16.0),
               child: Text('ノート　　：$noteName',
-                  style: TextStyle(fontSize: 30, color: Colors.blue))),
+                  style: TextStyle(fontSize: kFontSize, color: Colors.blue))),
         ],
       ),
-      bottomNavigationBar: Container(
-        height: 40.0,
-        alignment: Alignment.center,
-//            padding: EdgeInsets.only(bottom: 30.0),
-        color: Colors.lightBlue,
-      ),
+//      bottomNavigationBar: Container(
+//        height: 40.0,
+//        alignment: Alignment.center,
+////            padding: EdgeInsets.only(bottom: 30.0),
+//        color: Colors.lightBlue,
+//      ),
     );
   }
 }
