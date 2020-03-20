@@ -16,6 +16,7 @@ class MarkerPage extends StatefulWidget {
 }
 
 class _MarkerPageState extends State<MarkerPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int _counter = 0;
   Position position; // Geolocator　現在地
   List<Marker> markersData = []; // start,goalマーカー
@@ -46,20 +47,22 @@ class _MarkerPageState extends State<MarkerPage> {
 
     var features = await featuresFromGeoJson(res.body);
     features.collection.forEach((element) {
+      String iconName = 'images/pin-${element.properties['type']}.png';
       GeoJsonPoint tmp = element.geometry;
-      print('maker = $element');
-      print(tmp.geoPoint.toLatLng());
 //      LatLng point = tmp.geoPoint.toLatLng();
       Marker tmpdata = Marker(
         point: tmp.geoPoint.toLatLng(),
         builder: (ctx) {
-          if (element.properties['type'] == 'red') {
-            return Container(child: Image.asset('images/pin-red.png'));
-          } else if (element.properties['type'] == 'orange') {
-            return Container(child: Image.asset('images/pin-orange.png'));
-          } else {
-            return Container(child: Image.asset('images/pin-blue.png'));
-          }
+          return Container(
+            child: GestureDetector(
+              onTap: () {
+                _scaffoldKey.currentState.showSnackBar(SnackBar(
+                  content: Text(element.properties['comment']),
+                ));
+              },
+              child: Image.asset(iconName),
+            ),
+          );
         },
         width: 40.0,
         height: 40.0,
@@ -79,6 +82,7 @@ class _MarkerPageState extends State<MarkerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(title: Text('マーカー')),
       drawer: buildDrawer(context, MarkerPage.id),
       body: Column(
@@ -86,9 +90,9 @@ class _MarkerPageState extends State<MarkerPage> {
           Flexible(
             child: FlutterMap(
               options: MapOptions(
-                center: LatLng(35.000081, 137.004055),
-                zoom: 17.0,
-              ),
+                  center: LatLng(35.000081, 137.004055),
+                  zoom: 17.0,
+                  onLongPress: _handleTap),
               layers: [
                 TileLayerOptions(
                     urlTemplate: mapHttp[_counter % 4],
@@ -178,6 +182,68 @@ class _MarkerPageState extends State<MarkerPage> {
     );
   }
 
+  void _handleTap(LatLng latlng) async {
+    var result = await showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Column(
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Text(
+                    '危険',
+                    style: TextStyle(fontSize: 20, color: Colors.red),
+                  ),
+                  Text(
+                    '注意',
+                    style: TextStyle(fontSize: 20, color: Colors.yellow),
+                  ),
+                  Text(
+                    '安全',
+                    style: TextStyle(fontSize: 20, color: Colors.blue),
+                  ),
+//                  TextField(
+//                    enabled: true,
+//                    maxLength: 10,
+//                    maxLines: 1,
+//                    decoration: InputDecoration(
+//                        icon: Icon(Icons.add_location), hintText: 'message'),
+//                  ),
+                  SizedBox(
+                    width: 20.0,
+                  ),
+                  RaisedButton(
+                    onPressed: () => Navigator.of(context).pop(1),
+                    child: Text(
+                      '登録',
+                      style: TextStyle(fontSize: 20, color: Colors.black),
+                    ),
+                  ),
+                  RaisedButton(
+                    onPressed: () => Navigator.of(context).pop(2),
+                    child: Text(
+                      'ｷｬﾝｾﾙ',
+                      style: TextStyle(fontSize: 20, color: Colors.black),
+                    ),
+                  ),
+                ],
+              ),
+//              Row(
+//                children: <Widget>[
+//                  TextField(
+//                    enabled: true,
+//                    maxLength: 60,
+//                    maxLines: 3,
+//                    decoration: InputDecoration(
+//                        icon: Icon(Icons.add_location), hintText: 'ﾒｯｾｰｼﾞ入力'),
+//                  )
+//                ],
+//              ),
+            ],
+          );
+        });
+  }
+
   void _zoomIn() {
     double zoom = mapController.zoom + 1.0;
 
@@ -214,3 +280,41 @@ class _MarkerPageState extends State<MarkerPage> {
     });
   }
 }
+
+//showModalBottomSheet(
+//shape: RoundedRectangleBorder(
+//borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+//backgroundColor: Colors.black,
+//context: context,
+//isScrollControlled: true,
+//builder: (context) => Padding(
+//padding: const EdgeInsets.symmetric(horizontal:18 ),
+//child: Column(
+//crossAxisAlignment: CrossAxisAlignment.start,
+//mainAxisSize: MainAxisSize.min,
+//children: <Widget>[
+//Padding(
+//padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//child: Text('Enter your address',
+//style: TextStyles.textBody2),
+//),
+//SizedBox(
+//height: 8.0,
+//),
+//Padding(
+//padding: EdgeInsets.only(
+//bottom: MediaQuery.of(context).viewInsets.bottom),
+//child: TextField(
+//decoration: InputDecoration(
+//hintText: 'adddrss'
+//),
+//autofocus: true,
+//controller: _newMediaLinkAddressController,
+//),
+//),
+//
+//SizedBox(height: 10),
+//],
+//),
+//));
+//https://stackoverflow.com/questions/53869078/how-to-move-bottomsheet-along-with-keyboard-which-has-textfieldautofocused-is-t
