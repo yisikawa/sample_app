@@ -48,9 +48,6 @@ class _MarkerPageState extends State<MarkerPage> {
     features.collection.forEach((element) {
       String iconName = 'images/pin-${element.properties['type']}.png';
       GeoJsonPoint tmp = element.geometry;
-      print(tmp.geoPoint);
-      print(tmp.geoPoint.toLatLng());
-      LatLng point = tmp.geoPoint.toLatLng();
       Marker tmpdata = Marker(
         point: tmp.geoPoint.toLatLng(),
         builder: (ctx) {
