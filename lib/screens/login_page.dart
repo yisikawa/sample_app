@@ -12,8 +12,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   AccountData accountData = AccountData();
-  final TextEditingController _useridFilter = new TextEditingController();
-  final TextEditingController _passwordFilter = new TextEditingController();
+  final TextEditingController _useridFilter = TextEditingController();
+  final TextEditingController _passwordFilter = TextEditingController();
   String _userid = "";
   String _password = "";
 

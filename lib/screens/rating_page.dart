@@ -54,16 +54,18 @@ class _RatingState extends State<Rating> {
           globals.kTargetDate,
       headers: {HttpHeaders.authorizationHeader: globals.kAuthToken},
     );
-    if (response.statusCode == 200) {
-      var data = jsonDecode(response.body);
 
-      int cnt = 0;
-      data.forEach((val) {
-        setState(() {
+    if (response.statusCode == 200) {
+      setState(() {
+        var data = jsonDecode(response.body);
+
+        int cnt = 0;
+        data.forEach((val) {
           ratingNum[cnt] = val['rating'].toInt();
           ratingDate[cnt] = val['ratingDate'];
+
+          cnt++;
         });
-        cnt++;
       });
     } else {
       print('error status $response.statusCode');

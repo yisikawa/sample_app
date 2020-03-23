@@ -72,48 +72,50 @@ class _RoutePageState extends State<RoutePage> {
       headers: {HttpHeaders.authorizationHeader: globals.kAuthToken},
     );
     // 経路設定
-    if( res.statusCode == 200 ) {
-      setState(() {
-      points.clear();
-      var xmlGpx = GpxReader().fromString(res.body);
-      xmlGpx.trks.forEach((oneTrks) {
-        oneTrks.trksegs.forEach((oneTrksegs) {
-          oneTrksegs.trkpts.forEach((val) {
-            points.add(LatLng(val.lat, val.lon));
+    setState(() {
+      if( res.statusCode == 200 ) {
+        setState(() {
+          points.clear();
+          var xmlGpx = GpxReader().fromString(res.body);
+          xmlGpx.trks.forEach((oneTrks) {
+            oneTrks.trksegs.forEach((oneTrksegs) {
+              oneTrksegs.trkpts.forEach((val) {
+                points.add(LatLng(val.lat, val.lon));
+              });
+            });
           });
-        });
-      });
-      // start,goal マーカーセット
-      markersData.clear();
-      Marker tmp1 = Marker(
-        point: points.first,
-        builder: (ctx) =>
-         Container(child: Image.asset('images/start2.png')),
-        width: 40.0,
-        height: 40.0,
-      );
-      markersData.add(tmp1);
-      Marker tmp2 = Marker(
-        point: points.last,
-        builder: (ctx) =>
-            Container(child: Image.asset('images/goal.png')),
-        width: 40.0,
-        height: 40.0,
-      );
-      markersData.add(tmp2);
-      // 経路範囲
-      points.forEach((val) {
-        bounds.extend(val);
-      });
+          // start,goal マーカーセット
+          markersData.clear();
+          Marker tmp1 = Marker(
+            point: points.first,
+            builder: (ctx) =>
+                Container(child: Image.asset('images/start2.png')),
+            width: 40.0,
+            height: 40.0,
+          );
+          markersData.add(tmp1);
+          Marker tmp2 = Marker(
+            point: points.last,
+            builder: (ctx) =>
+                Container(child: Image.asset('images/goal.png')),
+            width: 40.0,
+            height: 40.0,
+          );
+          markersData.add(tmp2);
+          // 経路範囲
+          points.forEach((val) {
+            bounds.extend(val);
+          });
 
-      mapController.fitBounds(
-        bounds,
-        options: FitBoundsOptions(
-          padding: EdgeInsets.all(40.0),
-        ),
-      );
-      });
-    }
+          mapController.fitBounds(
+            bounds,
+            options: FitBoundsOptions(
+              padding: EdgeInsets.all(40.0),
+            ),
+          );
+        });
+      }
+    });
   }
 
   @override
@@ -125,7 +127,9 @@ class _RoutePageState extends State<RoutePage> {
           IconButton(
               icon: Icon(Icons.calendar_today),
               onPressed: () {
-                selectDate(context);
+                setState(() {
+                  selectDate(context);
+                });
                 _getRoute();
               }),
           PopupMenuButton<String> (

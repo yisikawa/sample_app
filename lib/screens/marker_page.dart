@@ -44,20 +44,26 @@ class _MarkerPageState extends State<MarkerPage> {
       headers: {HttpHeaders.authorizationHeader: globals.kAuthToken},
     );
     markersData.clear();
-
     var features = await featuresFromGeoJson(res.body);
     features.collection.forEach((element) {
       String iconName = 'images/pin-${element.properties['type']}.png';
       GeoJsonPoint tmp = element.geometry;
-//      LatLng point = tmp.geoPoint.toLatLng();
+      print(tmp.geoPoint);
+      print(tmp.geoPoint.toLatLng());
+      LatLng point = tmp.geoPoint.toLatLng();
       Marker tmpdata = Marker(
         point: tmp.geoPoint.toLatLng(),
         builder: (ctx) {
           return Container(
             child: GestureDetector(
+              onLongPress: () {
+                _handleTap(tmp.geoPoint.toLatLng());
+              },
               onTap: () {
                 _scaffoldKey.currentState.showSnackBar(SnackBar(
-                  content: Text(element.properties['comment']),
+                  content: Text(
+                    element.properties['type'] + element.properties['comment'],
+                  ),
                 ));
               },
               child: Image.asset(iconName),
@@ -67,7 +73,9 @@ class _MarkerPageState extends State<MarkerPage> {
         width: 40.0,
         height: 40.0,
       );
-      markersData.add(tmpdata);
+      setState(() {
+        markersData.add(tmpdata);
+      });
     });
   }
 
@@ -77,6 +85,12 @@ class _MarkerPageState extends State<MarkerPage> {
     mapController = MapController();
     _getLocation(context);
     _getMarker();
+  }
+
+  @override
+  void dispose() {
+    markerTextController.dispose();
+    super.dispose();
   }
 
   @override
@@ -182,64 +196,105 @@ class _MarkerPageState extends State<MarkerPage> {
     );
   }
 
+  final markerTextController = TextEditingController();
+  final List<bool> isSelected = [false, false, false];
+
   void _handleTap(LatLng latlng) async {
     var result = await showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(10.0),
+          ),
+        ),
         context: context,
-        builder: (BuildContext context) {
-          return Column(
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Text(
-                    '危険',
-                    style: TextStyle(fontSize: 20, color: Colors.red),
-                  ),
-                  Text(
-                    '注意',
-                    style: TextStyle(fontSize: 20, color: Colors.yellow),
-                  ),
-                  Text(
-                    '安全',
-                    style: TextStyle(fontSize: 20, color: Colors.blue),
-                  ),
-//                  TextField(
-//                    enabled: true,
-//                    maxLength: 10,
-//                    maxLines: 1,
-//                    decoration: InputDecoration(
-//                        icon: Icon(Icons.add_location), hintText: 'message'),
-//                  ),
-                  SizedBox(
-                    width: 20.0,
-                  ),
-                  RaisedButton(
-                    onPressed: () => Navigator.of(context).pop(1),
-                    child: Text(
-                      '登録',
-                      style: TextStyle(fontSize: 20, color: Colors.black),
-                    ),
-                  ),
-                  RaisedButton(
-                    onPressed: () => Navigator.of(context).pop(2),
-                    child: Text(
-                      'ｷｬﾝｾﾙ',
-                      style: TextStyle(fontSize: 20, color: Colors.black),
-                    ),
-                  ),
-                ],
-              ),
-//              Row(
-//                children: <Widget>[
-//                  TextField(
-//                    enabled: true,
-//                    maxLength: 60,
-//                    maxLines: 3,
-//                    decoration: InputDecoration(
-//                        icon: Icon(Icons.add_location), hintText: 'ﾒｯｾｰｼﾞ入力'),
-//                  )
-//                ],
+        isScrollControlled: true,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 12.0),
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 60.0,
+                ),
+//            Padding(
+//              padding: EdgeInsets.only(
+//                bottom: MediaQuery.of(context).viewInsets.bottom,
 //              ),
-            ],
+                TextField(
+                  style: TextStyle(color: Colors.black, fontSize: 30),
+                  enabled: true,
+//                  maxLength: 10,
+//                  maxLines: 1,
+                  autofocus: true,
+                  controller: markerTextController,
+                  decoration: InputDecoration(
+                    labelText: 'message',
+                    icon: Icon(
+                      Icons.add_location,
+                      size: 60,
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    ToggleButtons(
+                      children: <Widget>[
+                        Text(
+                          '危険',
+                          style: TextStyle(
+                            backgroundColor: Colors.red,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          '注意',
+                          style: TextStyle(
+                            backgroundColor: Colors.amber,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Text(
+                          '安全',
+                          style: TextStyle(
+                            backgroundColor: Colors.blue,
+                            color: Colors.black,
+                          ),
+                        )
+                      ],
+                      onPressed: (int index) {
+                        isSelected.forEach((f) {
+                          f = false;
+                        });
+                        setState(() {
+                          print('index = $index');
+                          isSelected[index] = !isSelected[index];
+                          print('isSelected = $isSelected');
+                        });
+                      },
+                      isSelected: isSelected,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        RaisedButton(
+                          child: Text('保存'),
+                          onPressed: () {
+                            Navigator.of(context).pop(1);
+                          },
+                        ),
+                        RaisedButton(
+                          child: Text('ｷｬﾝｾﾙ'),
+                          onPressed: () {
+                            Navigator.of(context).pop(2);
+                          },
+                        ),
+                      ],
+                    )
+                  ],
+                )
+              ],
+            ),
           );
         });
   }
@@ -280,41 +335,3 @@ class _MarkerPageState extends State<MarkerPage> {
     });
   }
 }
-
-//showModalBottomSheet(
-//shape: RoundedRectangleBorder(
-//borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
-//backgroundColor: Colors.black,
-//context: context,
-//isScrollControlled: true,
-//builder: (context) => Padding(
-//padding: const EdgeInsets.symmetric(horizontal:18 ),
-//child: Column(
-//crossAxisAlignment: CrossAxisAlignment.start,
-//mainAxisSize: MainAxisSize.min,
-//children: <Widget>[
-//Padding(
-//padding: const EdgeInsets.symmetric(horizontal: 12.0),
-//child: Text('Enter your address',
-//style: TextStyles.textBody2),
-//),
-//SizedBox(
-//height: 8.0,
-//),
-//Padding(
-//padding: EdgeInsets.only(
-//bottom: MediaQuery.of(context).viewInsets.bottom),
-//child: TextField(
-//decoration: InputDecoration(
-//hintText: 'adddrss'
-//),
-//autofocus: true,
-//controller: _newMediaLinkAddressController,
-//),
-//),
-//
-//SizedBox(height: 10),
-//],
-//),
-//));
-//https://stackoverflow.com/questions/53869078/how-to-move-bottomsheet-along-with-keyboard-which-has-textfieldautofocused-is-t
