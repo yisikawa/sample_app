@@ -268,7 +268,6 @@ class _MarkerPageState extends State<MarkerPage> {
                           for (int i = 0; i < isSelected.length; i++) {
                             isSelected[i] = (i == index);
                           }
-                          print('isSelected = $isSelected');
                         });
                       },
                       isSelected: isSelected,
