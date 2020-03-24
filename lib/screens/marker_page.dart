@@ -83,6 +83,7 @@ class _MarkerPageState extends State<MarkerPage> {
   void initState() {
     super.initState();
     mapController = MapController();
+    isSelected = [true, false, false];
     _getLocation(context);
     _getMarker();
   }
@@ -197,13 +198,16 @@ class _MarkerPageState extends State<MarkerPage> {
   }
 
   final markerTextController = TextEditingController();
-  final List<bool> isSelected = [false, false, false];
+  List<bool> isSelected;
+  List<String> iconName = ['red', 'orange', 'blue'];
+  int iconNum = 0;
+  List<dynamic> iconColor = [Colors.red, Colors.orange, Colors.blue];
 
   void _handleTap(LatLng latlng) async {
     var result = await showModalBottomSheet(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
-            top: Radius.circular(10.0),
+            top: Radius.circular(25.0),
           ),
         ),
         context: context,
@@ -216,23 +220,16 @@ class _MarkerPageState extends State<MarkerPage> {
                 SizedBox(
                   height: 60.0,
                 ),
-//            Padding(
-//              padding: EdgeInsets.only(
-//                bottom: MediaQuery.of(context).viewInsets.bottom,
-//              ),
                 TextField(
                   style: TextStyle(color: Colors.black, fontSize: 30),
                   enabled: true,
-//                  maxLength: 10,
-//                  maxLines: 1,
-                  autofocus: true,
                   controller: markerTextController,
                   decoration: InputDecoration(
                     labelText: 'message',
                     icon: Icon(
                       Icons.add_location,
                       size: 60,
-                      color: Colors.red,
+                      color: iconColor[iconNum],
                     ),
                   ),
                 ),
@@ -240,6 +237,8 @@ class _MarkerPageState extends State<MarkerPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     ToggleButtons(
+                      fillColor: Colors.grey,
+                      selectedColor: Colors.white,
                       children: <Widget>[
                         Text(
                           '危険',
@@ -264,12 +263,11 @@ class _MarkerPageState extends State<MarkerPage> {
                         )
                       ],
                       onPressed: (int index) {
-                        isSelected.forEach((f) {
-                          f = false;
-                        });
                         setState(() {
-                          print('index = $index');
-                          isSelected[index] = !isSelected[index];
+                          iconNum = index;
+                          for (int i = 0; i < isSelected.length; i++) {
+                            isSelected[i] = (i == index);
+                          }
                           print('isSelected = $isSelected');
                         });
                       },
@@ -301,7 +299,7 @@ class _MarkerPageState extends State<MarkerPage> {
       var val = {
         'lat': latlng.latitude.toString(),
         'lon': latlng.longitude.toString(),
-        'markerType': 'red',
+        'markerType': iconName[iconNum],
         'markerIcon': 'comment-dots',
         'markerComment': markerTextController.text,
       };
