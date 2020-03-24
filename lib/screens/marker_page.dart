@@ -60,6 +60,7 @@ class _MarkerPageState extends State<MarkerPage> {
               },
               onTap: () {
                 _scaffoldKey.currentState.showSnackBar(SnackBar(
+                  backgroundColor: Colors.blue,
                   content: Text(
                     element.properties['type'] + element.properties['comment'],
                   ),
