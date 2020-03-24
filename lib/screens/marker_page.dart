@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:http/http.dart' as http;
@@ -294,6 +296,29 @@ class _MarkerPageState extends State<MarkerPage> {
             ),
           );
         });
+    if (result == 1) {
+      var val = {
+        'lat': latlng.latitude.toString(),
+        'lon': latlng.longitude.toString(),
+        'markerType': 'red',
+        'markerIcon': 'comment-dots',
+        'markerComment': markerTextController.text,
+      };
+      String jsonText = json.encode(val);
+      var res = await http.post(
+        globals.kTargetUrl + 'api/marker',
+        headers: {
+          HttpHeaders.authorizationHeader: globals.kAuthToken,
+          'content-type': 'application/json',
+        },
+        body: jsonText,
+      );
+      if (res.statusCode == 200) {
+        _getMarker();
+      } else {
+        print('marker can not saved!');
+      }
+    }
   }
 
   void _zoomIn() {

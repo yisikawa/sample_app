@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: LoginPage.id,
+        initialRoute: MarkerPage.id,
         routes: <String, WidgetBuilder>{
           LoginPage.id: (context) => LoginPage(),
           AccountsPage.id: (context) => AccountsPage(),
