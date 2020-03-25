@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../constants/globals.dart' as globals;
 import 'package:intl/intl.dart';
 
-Future<void> selectDate(BuildContext context, Function updateFunc) async {
+Future<void> selectDate(BuildContext context) async {
   final DateTime picked = await showDatePicker(
     context: context,
     initialDate: globals.kSelectedDate,
@@ -15,6 +15,5 @@ Future<void> selectDate(BuildContext context, Function updateFunc) async {
     //ここで選択された値を変数なり、コントローラーに代入する
     globals.kTargetDate = DateFormat('yyyyMMdd').format(globals.kSelectedDate);
 //        print('select date = ' + globals.kTargetDate);
-    updateFunc;
   }
 }

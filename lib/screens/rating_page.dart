@@ -88,8 +88,8 @@ class _RatingPageState extends State<RatingPage> {
           IconButton(
               icon: Icon(Icons.calendar_today),
               onPressed: () {
-                selectDate(context, _getRating);
-//                _getRating();
+                selectDate(context);
+                _getRating();
               }),
         ],
       ),
@@ -187,9 +187,9 @@ class _RatingPageState extends State<RatingPage> {
                 SliderTheme(
                   data: SliderTheme.of(context).copyWith(
                     activeTrackColor: Colors.orange,
-                    inactiveTrackColor: Colors.blueAccent,
-                    thumbColor: Colors.red,
-                    overlayColor: Color(0x40EB1555),
+                    inactiveTrackColor: Colors.grey,
+                    thumbColor: Colors.orange,
+                    overlayColor: Colors.yellow,
                     thumbShape: RoundSliderThumbShape(enabledThumbRadius: 15.0),
                     overlayShape: RoundSliderOverlayShape(overlayRadius: 30.0),
                   ),
@@ -206,7 +206,6 @@ class _RatingPageState extends State<RatingPage> {
                         starNum = e.round();
                         ratingNum[targetNo] = starNum;
                         tempStar = countStar[starNum];
-                        print('starNum = $starNum');
                       });
                     },
                   ),
@@ -239,9 +238,6 @@ class _RatingPageState extends State<RatingPage> {
           );
         });
     if (result == 1) {
-      print(kAccountList[globals.kAccountNo].userID);
-      print(ratingDate[targetNo]);
-      print(ratingNum[targetNo]);
       var vals = [
         {
           'cuserId': kAccountList[globals.kAccountNo].userID,
@@ -256,7 +252,6 @@ class _RatingPageState extends State<RatingPage> {
         },
       ];
       String jsonText = json.encode(vals);
-//      String jsonText = json.encode(vals);
       var res = await http.put(
         globals.kTargetUrl + 'api/rating',
         headers: {
@@ -265,8 +260,6 @@ class _RatingPageState extends State<RatingPage> {
         },
         body: jsonText,
       );
-      print(res.body);
-      print(res.statusCode);
       if (res.statusCode == 200) {
         _getRating();
       } else {
