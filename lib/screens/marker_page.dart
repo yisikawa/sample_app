@@ -18,6 +18,12 @@ class MarkerPage extends StatefulWidget {
 }
 
 class _MarkerPageState extends State<MarkerPage> {
+  List<dynamic> iconColor = [Colors.red, Colors.orange, Colors.blue];
+  var markerTextController = TextEditingController();
+  List<bool> isSelected;
+  List<String> iconsName = ['red', 'orange', 'blue'];
+  int iconNum = 0;
+  int snackNum = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int _counter = 0;
   Position position; // Geolocator　現在地
@@ -56,13 +62,20 @@ class _MarkerPageState extends State<MarkerPage> {
           return Container(
             child: GestureDetector(
               onLongPress: () {
-                _handleTap(tmp.geoPoint.toLatLng());
+                _handleTapOldMarker(
+                    tmp.geoPoint.toLatLng(),
+                    element.properties['id'].toString(),
+                    element.properties['comment'].toString(),
+                    element.properties['type'].toString());
               },
               onTap: () {
+                snackNum =
+                    iconsName.indexOf(element.properties['type'].toString());
+                print(snackNum);
                 _scaffoldKey.currentState.showSnackBar(SnackBar(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: iconColor[snackNum],
                   content: Text(
-                    element.properties['type'] + element.properties['comment'],
+                    element.properties['comment'],
                   ),
                 ));
               },
@@ -83,7 +96,6 @@ class _MarkerPageState extends State<MarkerPage> {
   void initState() {
     super.initState();
     mapController = MapController();
-    isSelected = [true, false, false];
     _getLocation(context);
     _getMarker();
   }
@@ -107,7 +119,7 @@ class _MarkerPageState extends State<MarkerPage> {
               options: MapOptions(
                   center: LatLng(35.000081, 137.004055),
                   zoom: 17.0,
-                  onLongPress: _handleTap),
+                  onLongPress: _handleTapNewMarker),
               layers: [
                 TileLayerOptions(
                     urlTemplate: mapHttp[_counter % 4],
@@ -197,13 +209,12 @@ class _MarkerPageState extends State<MarkerPage> {
     );
   }
 
-  final markerTextController = TextEditingController();
-  List<bool> isSelected;
-  List<String> iconName = ['red', 'orange', 'blue'];
-  int iconNum = 0;
-  List<dynamic> iconColor = [Colors.red, Colors.orange, Colors.blue];
-
-  void _handleTap(LatLng latlng) async {
+  void _handleTapNewMarker(LatLng latlng) async {
+    setState(() {
+      markerTextController = TextEditingController(text: '');
+      iconNum = 0;
+      isSelected = [true, false, false];
+    });
     var result = await showModalBottomSheet(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
@@ -294,11 +305,11 @@ class _MarkerPageState extends State<MarkerPage> {
             ),
           );
         });
-    if (result == 1) {
+    if (result == 1 && markerTextController.text.length > 0) {
       var val = {
         'lat': latlng.latitude.toString(),
         'lon': latlng.longitude.toString(),
-        'markerType': iconName[iconNum],
+        'markerType': iconsName[iconNum],
         'markerIcon': 'comment-dots',
         'markerComment': markerTextController.text,
       };
@@ -310,6 +321,157 @@ class _MarkerPageState extends State<MarkerPage> {
           'content-type': 'application/json',
         },
         body: jsonText,
+      );
+      if (res.statusCode == 200) {
+        _getMarker();
+      } else {
+        print('marker can not saved!');
+      }
+    } else {
+      print('marker can not saved!');
+    }
+  }
+
+  void _handleTapOldMarker(
+      LatLng latlng, String id, String mess, String type) async {
+    setState(() {
+      markerTextController = TextEditingController(text: mess);
+      if (type == 'red') {
+        iconNum = 0;
+        isSelected = [true, false, false];
+      } else if (type == 'orange') {
+        iconNum = 1;
+        isSelected = [false, true, false];
+      } else {
+        iconNum = 2;
+        isSelected = [false, false, true];
+      }
+    });
+    var result = await showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(25.0),
+          ),
+        ),
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 12.0),
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 60.0,
+                ),
+                TextField(
+                  style: TextStyle(color: Colors.black, fontSize: 30),
+                  enabled: true,
+                  controller: markerTextController,
+                  decoration: InputDecoration(
+                    labelText: 'message',
+                    icon: Icon(
+                      Icons.add_location,
+                      size: 60,
+                      color: iconColor[iconNum],
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    ToggleButtons(
+                      fillColor: Colors.grey,
+                      selectedColor: Colors.white,
+                      children: <Widget>[
+                        Text(
+                          '危険',
+                          style: TextStyle(
+                            backgroundColor: Colors.red,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          '注意',
+                          style: TextStyle(
+                            backgroundColor: Colors.amber,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Text(
+                          '安全',
+                          style: TextStyle(
+                            backgroundColor: Colors.blue,
+                            color: Colors.black,
+                          ),
+                        )
+                      ],
+                      onPressed: (int index) {
+                        setState(() {
+                          iconNum = index;
+                          for (int i = 0; i < isSelected.length; i++) {
+                            isSelected[i] = (i == index);
+                          }
+                        });
+                      },
+                      isSelected: isSelected,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        RaisedButton(
+                          child: Text('変更'),
+                          onPressed: () {
+                            Navigator.of(context).pop(1);
+                          },
+                        ),
+                        RaisedButton(
+                          child: Text('削除'),
+                          onPressed: () {
+                            Navigator.of(context).pop(2);
+                          },
+                        ),
+                        RaisedButton(
+                          child: Text('ｷｬﾝｾﾙ'),
+                          onPressed: () {
+                            Navigator.of(context).pop(3);
+                          },
+                        ),
+                      ],
+                    )
+                  ],
+                )
+              ],
+            ),
+          );
+        });
+    if (result == 1) {
+      var val = {
+        'id': id,
+        'lat': latlng.latitude.toString(),
+        'lon': latlng.longitude.toString(),
+        'markerType': iconsName[iconNum],
+        'markerIcon': 'comment-dots',
+        'markerComment': markerTextController.text,
+      };
+      String jsonText = json.encode(val);
+      var res = await http.put(
+        globals.kTargetUrl + 'api/marker',
+        headers: {
+          HttpHeaders.authorizationHeader: globals.kAuthToken,
+          'content-type': 'application/json',
+        },
+        body: jsonText,
+      );
+      if (res.statusCode == 200) {
+        _getMarker();
+      } else {
+        print('marker can not saved!');
+      }
+    } else if (result == 2) {
+      var res = await http.delete(
+        globals.kTargetUrl + 'api/marker?id=$id',
+        headers: {
+          HttpHeaders.authorizationHeader: globals.kAuthToken,
+        },
       );
       if (res.statusCode == 200) {
         _getMarker();

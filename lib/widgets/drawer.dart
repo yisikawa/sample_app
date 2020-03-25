@@ -40,9 +40,9 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
         ListTile(
           leading: Icon(Icons.grade),
           title: Text(globals.kRatingPageTitle),
-          selected: currentRoute == Rating.id,
+          selected: currentRoute == RatingPage.id,
           onTap: () {
-            Navigator.pushReplacementNamed(context, Rating.id);
+            Navigator.pushReplacementNamed(context, RatingPage.id);
           },
         ),
         ListTile(

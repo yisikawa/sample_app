@@ -127,9 +127,7 @@ class _RoutePageState extends State<RoutePage> {
           IconButton(
               icon: Icon(Icons.calendar_today),
               onPressed: () {
-                setState(() {
                   selectDate(context);
-                });
                 _getRoute();
               }),
           PopupMenuButton<String> (

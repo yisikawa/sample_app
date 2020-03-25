@@ -9,13 +9,13 @@ import '../services/account.dart';
 import '../widgets/rating_day.dart';
 import '../services/select_date.dart';
 
-class Rating extends StatefulWidget {
+class RatingPage extends StatefulWidget {
   static const String id = 'Rating Page';
   @override
-  _RatingState createState() => _RatingState();
+  _RatingPageState createState() => _RatingPageState();
 }
 
-class _RatingState extends State<Rating> {
+class _RatingPageState extends State<RatingPage> {
 //  String accountName = accountList[globals.kAccountNo].note;
   String accountName = '';
   List<int> ratingNum = [
@@ -88,12 +88,12 @@ class _RatingState extends State<Rating> {
           IconButton(
               icon: Icon(Icons.calendar_today),
               onPressed: () {
-                selectDate(context).toString();
+                selectDate(context);
                 _getRating();
               }),
         ],
       ),
-      drawer: buildDrawer(context, Rating.id),
+      drawer: buildDrawer(context, RatingPage.id),
       body: Column(
         children: [
           Row(
@@ -133,19 +133,33 @@ class _RatingState extends State<Rating> {
           SizedBox(
             height: 10,
           ),
-          RatingDay(dayDate: ratingDate[1], dayStar: countStar[ratingNum[1]]),
-          RatingDay(dayDate: ratingDate[2], dayStar: countStar[ratingNum[2]]),
-          RatingDay(dayDate: ratingDate[3], dayStar: countStar[ratingNum[3]]),
-          RatingDay(dayDate: ratingDate[4], dayStar: countStar[ratingNum[4]]),
-          RatingDay(dayDate: ratingDate[5], dayStar: countStar[ratingNum[5]]),
+          FlatButton(
+              onPressed: () => _handleTapRating(1),
+              child: RatingDay(
+                  dayDate: ratingDate[1], dayStar: countStar[ratingNum[1]])),
+          FlatButton(
+              onPressed: () => _handleTapRating(2),
+              child: RatingDay(
+                  dayDate: ratingDate[2], dayStar: countStar[ratingNum[2]])),
+          FlatButton(
+              onPressed: () => _handleTapRating(3),
+              child: RatingDay(
+                  dayDate: ratingDate[3], dayStar: countStar[ratingNum[3]])),
+          FlatButton(
+              onPressed: () => _handleTapRating(4),
+              child: RatingDay(
+                  dayDate: ratingDate[4], dayStar: countStar[ratingNum[4]])),
+          FlatButton(
+              onPressed: () => _handleTapRating(5),
+              child: RatingDay(
+                  dayDate: ratingDate[5], dayStar: countStar[ratingNum[5]])),
         ],
       ),
-//      bottomNavigationBar: Container(
-//        height: 40.0,
-//        alignment: Alignment.center,
-////            padding: EdgeInsets.only(bottom: 30.0),
-//        color: Colors.lightBlue,
-//      ),
     );
+  }
+
+  void _handleTapRating(int dayNum) {
+    print('press No = $dayNum');
+    print(ratingDate[dayNum] + ' ' + countStar[ratingNum[dayNum]]);
   }
 }
