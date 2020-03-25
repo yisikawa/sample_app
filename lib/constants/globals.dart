@@ -10,7 +10,7 @@ String kTargetUrl = 'http://10.0.2.2:10080/';
 int kAccountNo = 0;
 int kTokoFlag = 1; // 1:登校　2:下校
 String kTargetDate = '';
-DateTime kSelectedDate = DateTime.now();
+DateTime kSelectedDate;
 
 const String kAppTitle = '登下校　見守りアプリ';
 const String kAccountPageTitle = 'アカウント';

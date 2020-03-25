@@ -4,7 +4,7 @@ import '../constants/globals.dart' as globals;
 import 'package:http/http.dart' as http;
 import 'dart:io';
 
-List<Account> accountList = [];
+List<Account> kAccountList = [];
 
 class Account {
   Account({this.userID, this.btxID, this.sensorID, this.note});
@@ -23,7 +23,7 @@ class AccountData {
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
       if (data != null) {
-        accountList.clear();
+        kAccountList.clear();
         data.forEach((val) {
           Account tmp = Account(
             userID: val['user_id'].toString(),
@@ -31,7 +31,7 @@ class AccountData {
             sensorID: val['sensor_id'].toString(),
             note: val['note'].toString(),
           );
-          accountList.add(tmp);
+          kAccountList.add(tmp);
         });
       }
     } else {

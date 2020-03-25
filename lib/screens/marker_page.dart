@@ -336,16 +336,9 @@ class _MarkerPageState extends State<MarkerPage> {
       LatLng latlng, String id, String mess, String type) async {
     setState(() {
       markerTextController = TextEditingController(text: mess);
-      if (type == 'red') {
-        iconNum = 0;
-        isSelected = [true, false, false];
-      } else if (type == 'orange') {
-        iconNum = 1;
-        isSelected = [false, true, false];
-      } else {
-        iconNum = 2;
-        isSelected = [false, false, true];
-      }
+      iconNum = iconsName.indexOf(type);
+      isSelected = [false, false, false];
+      isSelected[iconNum] = true;
     });
     var result = await showModalBottomSheet(
         shape: RoundedRectangleBorder(

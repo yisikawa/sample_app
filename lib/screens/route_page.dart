@@ -62,7 +62,7 @@ class _RoutePageState extends State<RoutePage> {
     var res = await http.get(
       globals.kTargetUrl +
           'api/route?userid=' +
-          accountList[globals.kAccountNo].userID +
+          kAccountList[globals.kAccountNo].userID +
 //          'ctest19' +
           '&date=' +
           globals.kTargetDate +
@@ -127,8 +127,8 @@ class _RoutePageState extends State<RoutePage> {
           IconButton(
               icon: Icon(Icons.calendar_today),
               onPressed: () {
-                  selectDate(context);
-                _getRoute();
+                  selectDate(context,_getRoute);
+//                _getRoute();
               }),
           PopupMenuButton<String> (
             icon: Icon(Icons.directions_walk),
@@ -162,7 +162,7 @@ class _RoutePageState extends State<RoutePage> {
                 color: Colors.black,
               ),
               Text(
-                accountList[globals.kAccountNo].note,
+                kAccountList[globals.kAccountNo].note,
                 style: TextStyle(fontSize: 24.0, color: Colors.black),
               ),
               Text(

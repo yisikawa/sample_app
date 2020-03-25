@@ -4,6 +4,7 @@ import '../services/account.dart';
 import '../constants/globals.dart' as globals;
 
 const kFontSize = 30.0;
+
 class AccountsPage extends StatefulWidget {
   static const String id = 'Account Page';
   @override
@@ -22,23 +23,23 @@ class _AccountsPageState extends State<AccountsPage> {
   @override
   void initState() {
     super.initState();
-    if (accountList.length > 0 && globals.kAccountNo < accountList.length) {
+    if (kAccountList.length > 0 && globals.kAccountNo < kAccountList.length) {
       updateAccount(globals.kAccountNo);
     }
   }
 
   void updateAccount(int currentNo) {
     setState(() {
-      accountName = accountList[currentNo].userID;
-      beaconName = accountList[currentNo].btxID;
-      sensorName = accountList[currentNo].sensorID;
-      noteName = accountList[currentNo].note;
+      accountName = kAccountList[currentNo].userID;
+      beaconName = kAccountList[currentNo].btxID;
+      sensorName = kAccountList[currentNo].sensorID;
+      noteName = kAccountList[currentNo].note;
     });
   }
 
   void _select(String choice) {
-    Account it = accountList.firstWhere((val) => val.userID == choice);
-    globals.kAccountNo = accountList.indexOf(it);
+    Account it = kAccountList.firstWhere((val) => val.userID == choice);
+    globals.kAccountNo = kAccountList.indexOf(it);
     updateAccount(globals.kAccountNo);
   }
 
@@ -50,10 +51,10 @@ class _AccountsPageState extends State<AccountsPage> {
         actions: <Widget>[
           PopupMenuButton<String>(
             icon: Icon(Icons.account_box),
-            initialValue: accountList.first.userID,
+            initialValue: kAccountList.first.userID,
             onSelected: _select,
             itemBuilder: (BuildContext context) {
-              return accountList.map((Account choice) {
+              return kAccountList.map((Account choice) {
                 return PopupMenuItem(
                   value: choice.userID,
                   child: Text(choice.note),

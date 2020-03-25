@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:sample_app/constants/globals.dart' as globals;
 import 'package:sample_app/screens/accounts_page.dart';
 import '../services/account.dart';
@@ -46,6 +47,9 @@ class _LoginPageState extends State<LoginPage> {
 
     if (globals.kAuthToken != null) {
       await accountData.getAccountData();
+      globals.kSelectedDate = DateTime.now();
+      globals.kTargetDate =
+          DateFormat('yyyyMMdd').format(globals.kSelectedDate);
       globals.kAccountNo = 0;
       setState(() {
         Navigator.of(context).pushNamed(AccountsPage.id);

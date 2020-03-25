@@ -47,7 +47,7 @@ class _RatingPageState extends State<RatingPage> {
     http.Response response = await http.get(
       globals.kTargetUrl +
           'api/rating?userid=' +
-          accountList[globals.kAccountNo].userID +
+          kAccountList[globals.kAccountNo].userID +
 //          'geko40c' +
           '&date=' +
 //          '20200217',
@@ -75,7 +75,7 @@ class _RatingPageState extends State<RatingPage> {
   @override
   void initState() {
     super.initState();
-    accountName = accountList[globals.kAccountNo].note;
+    accountName = kAccountList[globals.kAccountNo].note;
     _getRating();
   }
 
@@ -88,8 +88,8 @@ class _RatingPageState extends State<RatingPage> {
           IconButton(
               icon: Icon(Icons.calendar_today),
               onPressed: () {
-                selectDate(context);
-                _getRating();
+                selectDate(context, _getRating);
+//                _getRating();
               }),
         ],
       ),
@@ -158,8 +158,122 @@ class _RatingPageState extends State<RatingPage> {
     );
   }
 
-  void _handleTapRating(int dayNum) {
-    print('press No = $dayNum');
-    print(ratingDate[dayNum] + ' ' + countStar[ratingNum[dayNum]]);
+  void _handleTapRating(int targetNo) async {
+    String tempStar;
+    int starNum = ratingNum[targetNo];
+    tempStar = countStar[ratingNum[targetNo]];
+    var result = await showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 12.0),
+            child: Column(
+//              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Text(
+                  ratingDate[targetNo],
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 40,
+                  ),
+                ),
+                Text(
+                  tempStar,
+                  style: TextStyle(
+                    color: Colors.amber,
+                    fontSize: 60,
+                  ),
+                ),
+                SliderTheme(
+                  data: SliderTheme.of(context).copyWith(
+                    activeTrackColor: Colors.orange,
+                    inactiveTrackColor: Colors.blueAccent,
+                    thumbColor: Colors.red,
+                    overlayColor: Color(0x40EB1555),
+                    thumbShape: RoundSliderThumbShape(enabledThumbRadius: 15.0),
+                    overlayShape: RoundSliderOverlayShape(overlayRadius: 30.0),
+                  ),
+                  child: Slider(
+//                  label: '評価 $dayNum',
+                    min: 0,
+                    max: 5,
+                    value: starNum.toDouble(),
+//                    activeColor: Colors.orange,
+//                    inactiveColor: Colors.blueAccent,
+                    divisions: 5,
+                    onChanged: (double e) {
+                      setState(() {
+                        starNum = e.round();
+                        ratingNum[targetNo] = starNum;
+                        tempStar = countStar[starNum];
+                        print('starNum = $starNum');
+                      });
+                    },
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+//                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    RaisedButton(
+                      child: Text(
+                        '評価',
+                        style: TextStyle(color: Colors.blue, fontSize: 30),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop(1);
+                      },
+                    ),
+                    RaisedButton(
+                        child: Text(
+                          'ｷｬﾝｾﾙ',
+                          style: TextStyle(color: Colors.blue, fontSize: 30),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop(2);
+                        }),
+                  ],
+                ),
+              ],
+            ),
+          );
+        });
+    if (result == 1) {
+      print(kAccountList[globals.kAccountNo].userID);
+      print(ratingDate[targetNo]);
+      print(ratingNum[targetNo]);
+      var vals = [
+        {
+          'cuserId': kAccountList[globals.kAccountNo].userID,
+          'ratingDate': ratingDate[targetNo],
+          'rating': ratingNum[targetNo],
+          'shortCutCnt': null,
+          'detourCnt': null,
+          'wrongWayCnt': null,
+          'elapsedTime': null,
+          'markerCnt': 0,
+          'updflg': 1,
+        },
+      ];
+      String jsonText = json.encode(vals);
+//      String jsonText = json.encode(vals);
+      var res = await http.put(
+        globals.kTargetUrl + 'api/rating',
+        headers: {
+          HttpHeaders.authorizationHeader: globals.kAuthToken,
+          'content-type': 'application/json',
+        },
+        body: jsonText,
+      );
+      print(res.body);
+      print(res.statusCode);
+      if (res.statusCode == 200) {
+        _getRating();
+      } else {
+        print('rating can not saved!');
+      }
+    } else {
+      print('rating can not saved!');
+    }
   }
 }
