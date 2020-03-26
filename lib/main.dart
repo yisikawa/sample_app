@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
           RatingPage.id: (context) => RatingPage(),
           RoutePage.id: (context) => RoutePage(),
           MarkerPage.id: (context) => MarkerPage(),
-          Location.id: (context) => Location(),
+          LocationPage.id: (context) => LocationPage(),
         });
   }
 }

@@ -64,9 +64,9 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
         ListTile(
           leading: Icon(Icons.location_searching),
           title: Text(globals.kLocationPageTitle),
-          selected: currentRoute == Location.id,
+          selected: currentRoute == LocationPage.id,
           onTap: () {
-            Navigator.pushReplacementNamed(context, Location.id);
+            Navigator.pushReplacementNamed(context, LocationPage.id);
           },
         ),
       ],

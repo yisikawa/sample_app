@@ -8,6 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geojson/geojson.dart';
 import 'dart:io';
+import '../services/location_marker.dart';
 import '../widgets/drawer.dart';
 import '../constants/globals.dart' as globals;
 
@@ -24,79 +25,73 @@ class _MarkerPageState extends State<MarkerPage> {
   List<String> iconsName = ['red', 'orange', 'blue'];
   int iconNum = 0;
   int snackNum = 0;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  int _counter = 0;
-  Position position; // Geolocator　現在地
-  List<Marker> markersData = []; // start,goalマーカー
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  int _mapCounter = 0;
+  Position _mapPosition; // Geolocator　現在地
+  List<Marker> posMarkersData = []; // 現在地
+  List<Marker> mapMarkersData = []; // マーカー
   MapController mapController;
-  static const double minZoom = 11.0;
-  static const double maxZoom = 18.0;
-  static List<String> mapHttp = [
-//    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    'https://j.tile.openstreetmap.jp/{z}/{x}/{y}.png',
-    'https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png',
-    'https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png',
-    'https://cyberjapandata.gsi.go.jp/xyz/ort/{z}/{x}/{y}.jpg',
-  ];
-  Future<void> _getLocation(context) async {
+
+  Future<void> _getLocation() async {
     Position _currentPosition = await Geolocator().getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high); // ここで精度を「high」に指定している
-    setState(() {
-      position = _currentPosition;
-    });
+    _mapPosition = _currentPosition;
   }
 
   Future<void> _getMarker() async {
-    var res = await http.get(
+    http.Response res = await http.get(
       globals.kTargetUrl + 'api/marker',
       headers: {HttpHeaders.authorizationHeader: globals.kAuthToken},
     );
-    markersData.clear();
-    var features = await featuresFromGeoJson(res.body);
-    features.collection.forEach((element) {
-      String iconName = 'images/pin-${element.properties['type']}.png';
-      GeoJsonPoint tmp = element.geometry;
-      Marker tmpdata = Marker(
-        point: tmp.geoPoint.toLatLng(),
-        builder: (ctx) {
-          return Container(
-            child: GestureDetector(
-              onLongPress: () {
-                _handleTapOldMarker(
-                    tmp.geoPoint.toLatLng(),
-                    element.properties['id'].toString(),
-                    element.properties['comment'].toString(),
-                    element.properties['type'].toString());
-              },
-              onTap: () {
-                snackNum =
-                    iconsName.indexOf(element.properties['type'].toString());
-                print(snackNum);
-                _scaffoldKey.currentState.showSnackBar(SnackBar(
-                  backgroundColor: iconColor[snackNum],
-                  content: Text(
-                    element.properties['comment'],
-                  ),
-                ));
-              },
-              child: Image.asset(iconName),
-            ),
-          );
-        },
-        width: 40.0,
-        height: 40.0,
-      );
-      setState(() {
-        markersData.add(tmpdata);
+    if (res.statusCode == 200) {
+      mapMarkersData.clear();
+      var features = await featuresFromGeoJson(res.body);
+      features.collection.forEach((element) {
+        String iconName = 'images/pin-${element.properties['type']}.png';
+        GeoJsonPoint tmp = element.geometry;
+        Marker tmpdata = Marker(
+          point: tmp.geoPoint.toLatLng(),
+          builder: (ctx) {
+            return Container(
+              child: GestureDetector(
+                onLongPress: () {
+                  _handleTapOldMarker(
+                      tmp.geoPoint.toLatLng(),
+                      element.properties['id'].toString(),
+                      element.properties['comment'].toString(),
+                      element.properties['type'].toString());
+                },
+                onTap: () {
+                  snackNum =
+                      iconsName.indexOf(element.properties['type'].toString());
+                  _scaffoldKey.currentState.showSnackBar(SnackBar(
+                    backgroundColor: iconColor[snackNum],
+                    content: Text(
+                      element.properties['comment'],
+                    ),
+                  ));
+                },
+                child: Image.asset(iconName),
+              ),
+            );
+          },
+          width: 40.0,
+          height: 40.0,
+        );
+        setState(() {
+          mapMarkersData.add(tmpdata);
+        });
       });
-    });
+    } else {
+      print('can not get marker');
+    }
   }
 
   @override
   void initState() {
     super.initState();
     mapController = MapController();
-    _getLocation(context);
+    _getLocation();
     _getMarker();
   }
 
@@ -116,16 +111,20 @@ class _MarkerPageState extends State<MarkerPage> {
         children: [
           Flexible(
             child: FlutterMap(
+              mapController: mapController,
               options: MapOptions(
                   center: LatLng(35.000081, 137.004055),
                   zoom: 17.0,
                   onLongPress: _handleTapNewMarker),
               layers: [
                 TileLayerOptions(
-                    urlTemplate: mapHttp[_counter % 4],
+                    urlTemplate: globals.kMapHttp[_mapCounter % 4],
                     subdomains: ['a', 'b', 'c']),
                 MarkerLayerOptions(
-                  markers: markersData,
+                  markers: mapMarkersData,
+                ),
+                MarkerLayerOptions(
+                  markers: posMarkersData,
                 ),
               ],
             ),
@@ -477,8 +476,8 @@ class _MarkerPageState extends State<MarkerPage> {
   void _zoomIn() {
     double zoom = mapController.zoom + 1.0;
 
-    if (zoom > maxZoom) {
-      zoom = maxZoom;
+    if (zoom > globals.kMaxZoom) {
+      zoom = globals.kMaxZoom;
     }
     setState(() {
       mapController.move(mapController.center, zoom);
@@ -488,8 +487,8 @@ class _MarkerPageState extends State<MarkerPage> {
   void _zoomOut() {
     double zoom = mapController.zoom - 1.0;
 
-    if (zoom < minZoom) {
-      zoom = minZoom;
+    if (zoom < globals.kMinZoom) {
+      zoom = globals.kMinZoom;
     }
     setState(() {
       mapController.move(mapController.center, zoom);
@@ -497,16 +496,21 @@ class _MarkerPageState extends State<MarkerPage> {
   }
 
   void _myLocation() {
-    mapController.center.latitude = position.latitude;
-    mapController.center.longitude = position.longitude;
+    _getLocation();
+    posMarkersData.clear();
     setState(() {
+      Marker tmpdata =
+          MyLocMarker(LatLng(_mapPosition.latitude, _mapPosition.longitude));
+      posMarkersData.add(tmpdata);
+      mapController.center.latitude = _mapPosition.latitude;
+      mapController.center.longitude = _mapPosition.longitude;
       mapController.move(mapController.center, mapController.zoom);
     });
   }
 
   void _changeMap() {
     setState(() {
-      _counter++;
+      _mapCounter++;
     });
   }
 }

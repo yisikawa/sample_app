@@ -10,6 +10,7 @@ import '../widgets/drawer.dart';
 import '../services/select_date.dart';
 import '../constants/globals.dart' as globals;
 import '../services/account.dart';
+import '../services/location_marker.dart';
 
 
 class RoutePage extends StatefulWidget {
@@ -24,38 +25,29 @@ class _RoutePageState extends State<RoutePage> {
   String accountName = 'test';
   String examDate = '2020/01/01';
   String tokoName = '登校';
-  int _counter = 0;
-  Position position; // Geolocator　現在地
-  List<Marker> markersData = []; // start,goalマーカー
+  int _mapCounter = 0;
+  Position _mapPosition; // Geolocator　現在地
+  List<Marker> posMarkersData = []; // start,goalマーカー
+  List<Marker> mapMarkersData = []; // start,goalマーカー
   List<LatLng> points = []; //経路　
-  var bounds = new LatLngBounds(); // 経路範囲
+  var bounds = LatLngBounds(); // 経路範囲
   MapController mapController;
   final FitBoundsOptions options =
       const FitBoundsOptions(padding: EdgeInsets.all(12.0));
-  static const double minZoom = 11.0;
-  static const double maxZoom = 18.0;
-  static List<String> mapHttp = [
-//    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    'https://j.tile.openstreetmap.jp/{z}/{x}/{y}.png',
-    'https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png',
-    'https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png',
-    'https://cyberjapandata.gsi.go.jp/xyz/ort/{z}/{x}/{y}.jpg',
-  ];
+
 
   @override
   void initState() {
     super.initState();
     mapController = MapController();
-    _getLocation(context);
+    _getLocation();
     _getRoute();
   }
 
-  Future<void> _getLocation(context) async {
+  Future<void> _getLocation() async {
     Position _currentPosition = await Geolocator().getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high); // ここで精度を「high」に指定している
-    setState(() {
-      position = _currentPosition;
-    });
+      _mapPosition = _currentPosition;
   }
 
   Future<void> _getRoute() async {
@@ -72,7 +64,6 @@ class _RoutePageState extends State<RoutePage> {
       headers: {HttpHeaders.authorizationHeader: globals.kAuthToken},
     );
     // 経路設定
-    setState(() {
       if( res.statusCode == 200 ) {
         setState(() {
           points.clear();
@@ -85,7 +76,7 @@ class _RoutePageState extends State<RoutePage> {
             });
           });
           // start,goal マーカーセット
-          markersData.clear();
+          mapMarkersData.clear();
           Marker tmp1 = Marker(
             point: points.first,
             builder: (ctx) =>
@@ -93,7 +84,7 @@ class _RoutePageState extends State<RoutePage> {
             width: 40.0,
             height: 40.0,
           );
-          markersData.add(tmp1);
+          mapMarkersData.add(tmp1);
           Marker tmp2 = Marker(
             point: points.last,
             builder: (ctx) =>
@@ -101,7 +92,7 @@ class _RoutePageState extends State<RoutePage> {
             width: 40.0,
             height: 40.0,
           );
-          markersData.add(tmp2);
+          mapMarkersData.add(tmp2);
           // 経路範囲
           points.forEach((val) {
             bounds.extend(val);
@@ -115,7 +106,6 @@ class _RoutePageState extends State<RoutePage> {
           );
         });
       }
-    });
   }
 
   @override
@@ -190,7 +180,7 @@ class _RoutePageState extends State<RoutePage> {
               ),
               layers: [
                 TileLayerOptions(
-                  urlTemplate: mapHttp[_counter % 4],
+                  urlTemplate: globals.kMapHttp[_mapCounter % 4],
                   subdomains: ['a', 'b', 'c']),
 
                 PolylineLayerOptions(
@@ -199,7 +189,10 @@ class _RoutePageState extends State<RoutePage> {
                     ],
                 ),
                 MarkerLayerOptions(
-                  markers: markersData,
+                  markers: mapMarkersData,
+                ),
+                MarkerLayerOptions(
+                  markers: posMarkersData,
                 ),
               ],
             ),
@@ -286,8 +279,8 @@ class _RoutePageState extends State<RoutePage> {
   void _zoomIn() {
     double zoom = mapController.zoom + 1.0;
 
-    if (zoom > maxZoom) {
-      zoom = maxZoom;
+    if (zoom > globals.kMaxZoom) {
+      zoom = globals.kMaxZoom;
     }
     setState(() {
       mapController.move(mapController.center, zoom);
@@ -297,8 +290,8 @@ class _RoutePageState extends State<RoutePage> {
   void _zoomOut() {
     double zoom = mapController.zoom - 1.0;
 
-    if (zoom < minZoom) {
-      zoom = minZoom;
+    if (zoom < globals.kMinZoom) {
+      zoom = globals.kMinZoom;
     }
     setState(() {
       mapController.move(mapController.center, zoom);
@@ -306,16 +299,20 @@ class _RoutePageState extends State<RoutePage> {
   }
 
   void _myLocation() {
-    mapController.center.latitude = position.latitude;
-    mapController.center.longitude = position.longitude;
+    _getLocation();
+    posMarkersData.clear();
     setState(() {
+      Marker tmpdata = MyLocMarker(LatLng(_mapPosition.latitude, _mapPosition.longitude));
+      posMarkersData.add(tmpdata);
+      mapController.center.latitude = _mapPosition.latitude;
+      mapController.center.longitude = _mapPosition.longitude;
       mapController.move(mapController.center, mapController.zoom);
     });
   }
 
   void _changeMap() {
     setState(() {
-      _counter++;
+      _mapCounter++;
     });
   }
 }
