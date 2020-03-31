@@ -14,8 +14,8 @@ DateTime kSelectedDate;
 
 const String kAppTitle = '登下校　見守りアプリ';
 const String kAccountPageTitle = 'アカウント';
-const String kRatingPageTitle = '通学評価';
-const String kRoutePageTitle = '通学経路';
+const String kRatingPageTitle = '登下校評価';
+const String kRoutePageTitle = '登下校経路';
 const String kMakerPageTitle = 'マーカー';
 const String kLocationPageTitle = 'ユーザー位置';
 
