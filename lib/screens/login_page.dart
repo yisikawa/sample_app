@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:sample_app/constants/globals.dart' as globals;
 import 'package:sample_app/screens/accounts_page.dart';
 import '../services/account.dart';
@@ -12,6 +13,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool showSpinner = false;
   AccountData accountData = AccountData();
   final TextEditingController _useridFilter = TextEditingController();
   final TextEditingController _passwordFilter = TextEditingController();
@@ -40,6 +42,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _loginPressed() async {
+    setState(() {
+      showSpinner = true;
+    });
     final res = await http.post(globals.kTargetUrl + 'api/login',
         body: {'userid': _userid, 'password': _password});
     globals.kAuthToken = res.headers['authorization'];
@@ -51,8 +56,9 @@ class _LoginPageState extends State<LoginPage> {
       globals.kTargetDate =
           DateFormat('yyyyMMdd').format(globals.kSelectedDate);
       globals.kAccountNo = 0;
+      Navigator.of(context).pushNamed(AccountsPage.id);
       setState(() {
-        Navigator.of(context).pushNamed(AccountsPage.id);
+        showSpinner = false;
       });
     } else {
       print('can not login!');
@@ -66,49 +72,52 @@ class _LoginPageState extends State<LoginPage> {
         title: Text("ログインしてください"),
         centerTitle: true,
       ),
-      body: Container(
-        padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            TextField(
-              controller: _useridFilter,
-              decoration: InputDecoration(
-                  labelText: 'ユーザーID',
-                  icon: Icon(
-                    Icons.account_circle,
-                    size: 40.0,
-                  )),
-            ),
-            SizedBox(
-              height: 8.0,
-            ),
-            TextField(
-              controller: _passwordFilter,
-              decoration: InputDecoration(
-                  labelText: 'パスワード',
+      body: ModalProgressHUD(
+        inAsyncCall: showSpinner,
+        child: Container(
+          padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              TextField(
+                controller: _useridFilter,
+                decoration: InputDecoration(
+                    labelText: 'ユーザーID',
+                    icon: Icon(
+                      Icons.account_circle,
+                      size: 40.0,
+                    )),
+              ),
+              SizedBox(
+                height: 8.0,
+              ),
+              TextField(
+                controller: _passwordFilter,
+                decoration: InputDecoration(
+                    labelText: 'パスワード',
 //                  hintText: 'enter password',
-                  icon: Icon(
-                    Icons.security,
-                    size: 40.0,
-                  )),
-              obscureText: true,
-            ),
-            SizedBox(
-              height: 24.0,
-            ),
-            RaisedButton(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(5.0),
+                    icon: Icon(
+                      Icons.security,
+                      size: 40.0,
+                    )),
+                obscureText: true,
+              ),
+              SizedBox(
+                height: 24.0,
+              ),
+              RaisedButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5.0),
+                  ),
                 ),
+                child: Text(
+                  'ログイン',
+                ),
+                onPressed: _loginPressed,
               ),
-              child: Text(
-                'ログイン',
-              ),
-              onPressed: _loginPressed,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
