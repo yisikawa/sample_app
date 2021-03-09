@@ -23,8 +23,8 @@ const double kMinZoom = 10.0;
 const double kMaxZoom = 19.0;
 const List<String> kMapHttp = [
 //    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  'https://j.tile.openstreetmap.jp/{z}/{x}/{y}.png',
-  'https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png',
+//  'https://j.tile.openstreetmap.jp/{z}/{x}/{y}.png', can not use
   'https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png',
+  'https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png',
   'https://cyberjapandata.gsi.go.jp/xyz/ort/{z}/{x}/{y}.jpg',
 ];
